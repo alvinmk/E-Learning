@@ -1,0 +1,292 @@
+/*------------------------------
+=BASIC SETUP
+------------------------------*/
+
+/* Makeshift CSS Reset */
+* {
+	margin: 0;
+	padding: 0;
+}
+
+/* Tell the browser to render HTML 5 elements as block */
+header, footer, section, aside, nav, article {
+	display: block;
+}
+
+body {
+	margin: 0 auto;
+	padding: 22px 0;
+	width: 940px;
+	font: 13px/22px Helvetica, Arial, sans-serif;
+	background: #F0F0F0;
+}
+
+h1, h2 {
+	font-size: 18px;
+	line-height: 44px;
+	padding: 22px 0;
+}
+
+h3 {
+	font-size: 12px;
+	line-height: 22px;
+	padding: 11px 0;
+}
+
+p {
+	padding-bottom: 22px;
+}
+
+
+
+/*------------------------------
+=NAVIGATION
+------------------------------*/
+
+nav {
+	position: absolute;
+	left: 0;
+	width: 100%;
+	background: url("../images/nav_background.png");
+}
+
+	nav ul {
+		margin: 0 auto;
+		width: 940px;
+		list-style: none;
+	}
+
+		nav ul li {
+			float: left;
+		}
+		
+			nav ul li a {
+				display: block;
+				margin-right: 20px;
+				width: 140px;
+				font-size: 14px;
+				line-height: 44px;
+				text-align: center;
+				text-decoration: none;
+				color: #777;
+			}
+			
+				nav ul li a:hover {
+					color: #fff;
+				}
+			
+			nav ul li.selected a {
+				color: #fff;
+			}
+			
+			nav ul li.subscribe a {
+				margin-left: 22px;
+				padding-left: 33px;
+				text-align: left;
+				background: url("../images/rss.png") left center no-repeat;
+			}
+
+
+
+/*------------------------------
+=INTRODUCTION
+------------------------------*/
+
+#intro {
+	position: relative;
+	margin-top: 66px;
+	padding: 44px;
+	background: #467612 url("../images/intro_background.png") repeat-x;
+	
+	/* Background-size not implemented yet */
+	-webkit-background-size: 200%;
+	-o-background-size: 200%;
+	-khtml-background-size: 200%;
+
+	
+	/* Border-radius not implemented yet */
+	-moz-border-radius: 22px;
+	-webkit-border-radius: 22px;
+}
+
+	#intro h2, #intro p {
+		position: relative;
+		z-index: 9999;
+		width: 336px;
+	}
+	
+	#intro h2 {
+		padding: 0 0 22px 0;
+		font-weight: normal;
+		color: #fff;
+	}
+
+	#intro ul {
+		margin: 0 auto;
+		width: 940px;
+		list-style: none;
+	}
+
+	#intro ul li {
+			float: left;
+		}
+
+	#intro ul li a {
+				display: block;
+				margin-right: 20px;
+				width: 140px;
+				font-size: 14px;
+				line-height: 44px;
+				text-align: center;
+				text-decoration: none;
+				color: #777;
+			}
+	
+
+
+
+/*------------------------------
+=CONTENT AREA AND SIDEBAR LAYOUT
+------------------------------*/
+
+#content {
+	display: table;
+}
+
+	#mainContent {
+		display: table-cell;
+		width: 620px;
+		padding-right: 22px;
+	}
+	
+	aside {
+		display: table-cell;
+		width: 300px;
+		background: url("../images/sidebar_background.png") top left;
+	}
+
+
+
+
+/*------------------------------
+=COMMENTS
+------------------------------*/
+
+#feedback {
+	margin-top: 21px;
+	padding-top: 22px;
+	border-top: 1px solid #d7d7d7;
+}
+
+	#feedback article {
+		display: table;
+		padding: 22px;
+	}
+	
+	#feedback article:nth-child(odd) {
+		padding: 21px;
+		background: #E3E3E3;
+		border: 1px solid #d7d7d7;
+		-moz-border-radius: 11px;
+		-webkit-border-radius: 11px;
+	}
+	
+		#feedback article header {
+			display: table-cell;
+			width: 220px;
+			padding-right: 22px;
+		}
+		
+			#feedback article header a {
+				display: block;
+				font-weight: bold;
+				color: #000;
+			}
+			
+				#feedback article header a:hover {
+					text-decoration: none;
+				}
+		
+		#feedback article p {
+			padding: 0;
+		}
+
+/*------------------------------
+=SIDEBAR
+------------------------------*/
+aside section {
+	margin: 22px 0 0 22px;
+	padding: 11px 22px;
+	background: url("../images/sidebar_section_background.png") repeat-x;
+	
+	/* Border-radius not implemented yet */
+	-moz-border-radius: 11px;
+	-webkit-border-radius: 11px;
+}
+
+	aside section ul {
+		margin: 0 0 0 22px;
+		list-style: none;
+	}
+	
+		aside section ul li a {
+			display: block;
+			text-decoration: none;
+			color: #000;
+		}
+		
+			aside section ul li a:hover {
+				text-decoration: underline;
+			}
+
+
+
+/*------------------------------
+=FOOTER
+------------------------------*/
+footer {
+	position: absolute;
+	left: 0;
+	width: 100%;
+	background: #222;
+}
+
+	footer div {
+		display: table;
+		margin: 0 auto;
+		padding: 44px 0;
+		width: 940px;
+		color: #777;
+	}
+	
+		footer div section {
+			display: table-cell;
+			width: 300px;
+		}
+		
+		footer div #about, footer div #blogroll {
+			padding-right: 20px;
+		}
+		
+	footer h3 {
+		color: #FFF;
+	}
+	
+	footer a {
+		color: #999;
+	}
+	
+		footer a:hover {
+			color: #FFF;
+			text-decoration: none;
+		}
+	
+	footer ul {
+		margin: 0 0 0 40px;
+		list-style: square;
+		color: #565656;
+	}
+	
+		footer ul li a {
+			display: block;
+		}

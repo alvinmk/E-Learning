@@ -1,0 +1,48 @@
+<script language="javascript" type="text/javascript" src="/src/javascript/swfobject.js"></script>
+<script language="javascript" type="text/javascript" src="/src/javascript/upload.js"></script>
+<script language="javascrip" type="text/javascript">
+	setVideo("[% lecturePath %]", "[% lecture %]","[% fileExtension %]");
+</script>
+<link rel="stylesheet" href=[% c.uri_for('/static/css/watch.css') %] type="text/css" media="screen" />
+
+<div id="mainContent">
+<form method="POST" action="[% c.uri_for('editDone') %]" enctype="multipart/form-data" name="videoInfo">
+	<section id="lecture">
+		<input type="text" name="title" size="25" value="[% title %]">
+		<div id="videoDiv" name="video"></div>
+	</section>
+	<label>Chapter</label><label><input type="text" name="ts" size="25"><input type="button" name="Start" value="Start" onClick="startTimestamp()"><input type="button" name="Stop" value="Stop" onClick="stopTimestamp()"></label>
+</div>
+
+<aside id="info">
+	<section id="similar">
+		<h3>Description</h3>
+		<textarea rows="7" cols="20" wrap="physical" name="description">[% description %]</textarea>
+	</section>
+	<section>
+		<h3>Keywords</h3>
+		<textarea rows="7" cols="20" wrap="physical" name="tags">[% FOREACH item = tags %][% item %], [% END %]</textarea>
+	</section>
+	<section>
+		<h3>Chapters</h3>
+		<textarea rows="5" cols="20" wrap="physical" name="chapter" id="timestamps">[% FOREACH item = chapters %][% item %], [% END %]</textarea>
+	</section>
+	<section>
+		<label>Category: </label>
+		<select name="category">
+			<option value="preventive">preventive</option>
+			<option value="diagnosis">diagnosis</option>
+			<option value="treatment">treatment</option>
+			<option value="general">general</option>
+		</select>
+		<br>
+		<label>Availability: </label>
+		<select name="availability">
+			<option value="shared">shared</option>
+			<option value="personal">personal</option>
+		</select>
+	</section>
+	<input type="hidden" name="id" value="[% id %]">
+	<input type="submit" name="submit" value="Submit">
+</form>
+</aside>

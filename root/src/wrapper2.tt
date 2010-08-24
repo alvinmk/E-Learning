@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<link rel="stylesheet" href=[% c.uri_for('/static/css/master2.css') %] type="text/css" media="screen" />
+</head>
+<body>
+	<div id="content">
+		<aside id="menu">
+			<h3>E-learning Portal</h3>
+			<a href=[% c.uri_for('/list') %]>
+				<section>Find</section>
+			</a>
+			<a href=[% c.uri_for('/upload') %]>
+				<section>Add</section>
+			</a>
+			<a href=[% c.uri_for('/help') %]>
+				<section>Help</section>
+			</a>
+			<p>
+				<a href="[% c.uri_for('/search/creator') %]/[% user %]">[% user %]</a><br>Watched: [% watched %] lectures<br>created [% created %] lectures<br>Answered [% totalQuestions %] questions and [% correct %] of them where correct<br>
+			</p>
+		</aside>
+		[% content %]
+	</div>
+	
+	<footer>
+		<div>
+			<p>ICT4MPOWER, UGANDA</p>
+		</div>
+	</footer>
+</body>
+</html>
+

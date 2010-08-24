@@ -1,0 +1,64 @@
+<link rel="stylesheet" href=[% c.uri_for('/static/css/search.css') %] type="text/css" media="screen" />
+<div id="mainContent">
+	<div id="searchMenu">
+		<div id="searchBar">		
+			<form action="[% c.uri_for('text') %]"  method="post" enctype="multipart/form-data">
+				<label>
+					<input type="text" name="searchString" size="15"></td></tr>
+					<select name="category">
+						<option value="any">any</option>
+						<option value="preventive">preventive</option>
+						<option value="diagnosis">diagnosis</option>
+						<option value="treatment">treatment</option>
+						<option value="general">general</option>
+					</select>
+					<input type="submit" name="search" value="find">
+				</label>
+			</form>
+		</div>
+		<div id="quickSearch">
+			<a href="[% c.uri_for('/search/getWatchedLectures/>/0') %]">			
+			<div>
+				<p>Watched</p>
+			</div>		
+			</a>	
+			<a href="[% c.uri_for('/search/getWatchedLectures/</1') %]">
+			<div>
+				<p>Not seen</p>
+			</div
+			</a>
+			<a href="[% c.uri_for('/search/getRecomended') %]">
+			<div>
+				<p>Recomended</p>
+			</div>
+			</a>
+			<a href="[% c.uri_for('/search/getRemembered') %]">
+			<div>
+				<p>Remebered</p>
+			</div>
+			</a>
+			<a href="[% c.uri_for('/listCourses') %]/all">
+			<div>
+				<p>Courses</p>
+			</div>
+			</a>
+			<a href="[% c.uri_for('/search/creator') %]/[% user %]">
+			<div>
+				<p>My lectures</p>
+			</div>
+			</a>
+		</div>
+	</div>	
+	<h3>
+		Showing results for: 
+		[% FOREACH tag = header %]
+			[% tag %]
+		[% END %]
+		[% category %]	
+	</h3>
+	<section id="result">
+		[% FOREACH item = list %]
+					<a href="[% c.uri_for('/watch') %]/[% item.id %]"><div id="resultItem"><h3>[% item.name %] by [% item.creator %]</h3><p>[% item.description %]</p></div></a>
+		[% END %]
+	</section
+</div>

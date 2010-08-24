@@ -1,0 +1,70 @@
+/*--------------------------------
+=Basic layout
+--------------------------------*/
+#mainContent div{
+	padding: 5px;	
+}
+
+/*----------------------
+=SEARCH BAR
+----------------------*/
+#searchMenu {
+	display: table;
+	position: center;
+	left: 0;
+	height: 40px;
+	background: #222;
+	padding: 5px;
+	-moz-border-radius: 7px;
+}
+
+#searchBar {
+	display: table-cell;
+}
+
+#qucikSearch {
+	display: table-cell;
+	position: left;
+}
+
+#quickSearch div {
+
+	display: table-cell;
+	color: #111;
+	padding-left: 2px;
+	width: 68px;
+	display: table-cell;
+	background: #888;
+	-moz-border-radius: 5px;
+}
+
+#quickSearch div:hover {
+	background: #666;
+
+}
+/*-------------------------
+=RESULT LIST
+-------------------------*/
+#result {
+	-moz-column-width: 380px;
+	-moz-column-count: 2;
+}
+
+#result div{
+	width: 380px;
+	height: 80px;
+	display: block;
+	padding-bottom: 5px;
+	background: #7CE242;
+	border: 1px solid;
+	/* Border-radius not implemented yet */
+	-moz-border-radius: 7px;
+	overflow: hidden;
+}
+
+#result div:hover{
+	background: #73F373;
+	display:table-cell;
+}
+
+

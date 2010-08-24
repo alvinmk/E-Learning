@@ -1,0 +1,9 @@
+<link rel="stylesheet" href=[% c.uri_for('/static/css/search.css') %] type="text/css" media="screen" />
+<div id="mainContent">
+	<h1>Courses</h1>
+	<section id="result">
+		[% FOREACH course = courses %]
+					<a href="[% c.uri_for('/getCourseLectures') %]/[% course.course_name %]"><div id="resultItem"><h3>[% course.course_name %]</h3><p>[% course.description %]</p></div></a>
+		[% END %]
+	</section
+</div>

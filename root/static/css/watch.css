@@ -1,0 +1,81 @@
+/*--------------------------------
+=Basic layout
+--------------------------------*/
+
+#info {
+	display: table-cell;
+	width: 190px;
+	background: url("../images/menu_background.png") top left;
+	padding-right: 2px;
+	-moz-border-radius: 7px;
+	overflow: auto;
+}
+
+/*----------------------------
+=FEEDBACK
+-----------------------------*/
+#feedback{
+	overflow: auto;
+	display: table;
+	width: 600px;
+	height: 300px;
+	overflow: auto;
+}
+
+.coment{
+	padding: 5px;
+	background: #53F353;
+	border: 1px solid #d7d7d7;
+	/* Border-radius not implemented yet */
+	-moz-border-radius: 7px;
+}
+
+.coment:nth-child(odd){
+	background: #73F373;
+
+}
+
+/*-----------------------------
+=INFO
+----------------------------*/
+#similar section
+{
+	margin: 10px 0 0 0px;
+	padding-left: 7px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	background: url("../images/intro_background.png") top left;
+	/* Border-radius not implemented yet */
+	-moz-border-radius: 5px;
+	overflow: auto;
+}
+
+#info > section {
+	margin: 0px 0px 10px 5px;
+	padding-left: 7px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	background: url("../images/sidebar_section_background.png") repeat-x;
+	/* Border-radius not implemented yet */
+	-moz-border-radius: 7px;
+}
+
+#similar section:hover{
+	margin: 11px 0 0 0px;
+	padding-bottom: 15px;
+	padding-top: 15px;
+	/* Border-radius not implemented yet */
+	-moz-border-radius: 7px;
+}
+
+/*------------------------------------
+=Hide and show question
+-------------------------------------*/
+.hideDiv{
+	display: table;
+	visibility: collapse;
+}
+
+.showDiv {
+	visibility: visible;
+}

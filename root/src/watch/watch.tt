@@ -1,0 +1,76 @@
+<script language="javascript" type="text/javascript" src="/src/javascript/swfobject.js"></script>
+<script language="javascript" type="text/javascript" src="/src/javascript/watch.js"></script>
+<script language="javascript" type="text/javascript" src="/src/javascript/upload.js"></script>
+<script language="javascript" type="text/javascript" src="/src/javascript/jQuery.js"></script>
+<script language="javascrip" type="text/javascript">
+	setVideo("[% lecturePath %]", "[% lecture %]","[% fileExtension %]");
+	var questionNumber="[% questionNumber %]";
+</script>
+<link rel="stylesheet" href=[% c.uri_for('/static/css/watch.css') %] type="text/css" media="screen" />
+
+<div id="mainContent">
+	<section id="lecture">
+		<h2 id="title">[% title %] By <a href="[% c.uri_for('/search/creator') %]/[% creator %]">[% creator %]</a></h2>
+		[% adminView %] [% recomend %]
+		<div id="videoDiv" name="video"></div>
+		<input type=button name="1" value="Thumbs up!" onClick="buttonClick('Thumbs up!')">
+		<input type=button name="-1" value="Thumbs down!" onClick="buttonClick('Thumbs down!')">
+		<input type=button name="Remember this" value="Remember this" onClick="buttonClick('Remember this')">
+	</section>
+	<div id="questions" class="showDiv">
+		<p id="previousQuestion"></p>
+		<div id="alternatives">
+		<p id="questionAsked">[% question %]</p>
+		[% FOREACH alt = alternatives %]
+			<input type="radio" id="[% loop.count %]" name="group1" value="[% alt %]"><label for="[% loop.count %]" id="alt_text[% loop.count %]">[% alt %]</label><br>
+		[% END %]
+		<p id="questionAskedBy"> asked by <a href="[% c.uri_for('/search/creator') %]/[% creator %]">[% creator %]</a></p>
+		</div>
+	<input type=button name="Answer" value="Answer" onClick="answer()">	
+	<input type=button name="Add question" value="Add question" onClick="buttonClick('Add question')">	
+	</div>
+	<div id="addQuestions" class="hideDiv">Question<input type='text' id='question' size='20'><br>Answer <input type='text' id='answer' size='20'><br>Alternative <input type='text' id='alt1' size='20'><br>Alternative <input type='text' id='alt2' size='20'><br><input type='submit' name='Add' value='Done' onClick='addQuestion()'><input type='button' name='back' value='Back to question' onClick="buttonClick('Back to question')"></div>
+	<section id="feedback">
+		<h2>Comments</h2>
+		[% FOREACH item = feedback %]
+			<section class="coment"><h3>[% item.user %]</h3><p>[% item.feedback %]</p></section>
+		[% END %]
+	</section>
+	<section>
+	<h3>Add your comment</h3>
+	<form method="POST" action="[% c.uri_for('/submitFeedback') %]" enctype="multipart/form-data" name="feedback">
+		<textarea name="feedback" cols="75"></textarea>
+		<input type="hidden" name="lectureid" value="[% id %]">
+		<input type="submit" name="submit" value="Submit">
+	</form>
+	</section>
+</div>
+
+<aside id="info">
+	<section>
+		<h3>Keywords</h3>
+		<p>
+			[% FOREACH item = tags %]
+				<a href="[% c.uri_for('/search/tags') %]/[% item %]">[% item %]</a>,
+			[% END %]
+		</p>
+	</section>
+
+	<section id="similar">
+		<h3>Similar lectures</h3>
+		<ul>
+			[% FOREACH item = similar %]
+					<li><a href=[% c.uri_for('/watch/') %][% item %]><section>[% item %]</section></a></li>
+			[% END %]
+		</ul>
+	</section>
+
+</aside>
+
+
+
+
+
+
+
+

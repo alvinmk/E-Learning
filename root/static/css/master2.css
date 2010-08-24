@@ -1,0 +1,143 @@
+/*------------------------------
+=BASIC SETUP
+------------------------------*/
+
+/* Makeshift CSS Reset */
+* {
+	margin: 0;
+	padding: 0;
+}
+
+/* Tell the browser to render HTML 5 elements as block */
+header, footer, section, aside {
+	display: block;
+}
+
+body {
+	margin: 0 auto;
+	padding: 2px 0;
+	width: 940px;
+	font: 90%/120% Georgia, Verdana, Arial, sans-serif;
+	background: #F0F0F0;
+}
+
+h1, h2 {
+	font-size: 120%;
+	line-height: 20px;
+	padding: 5px 0;
+}
+
+h3 {
+	font-size: 100%;
+	strong;
+	line-height: 15px;
+	padding: 2px 0;
+}
+
+p {
+	font-size: 90%;
+	padding-bottom: 6px;
+}
+
+ul  {
+	list-style: none;
+}
+
+#content {
+	left: 0;	
+	display: table;
+	background: #F2F2F2;
+}
+
+/*------------------------------
+=HEADER
+------------------------------*/
+header {
+		background: #44BF44;
+}
+
+/*------------------------------
+=MENU
+------------------------------*/
+#menu {
+	display: table-cell;
+	width: 120px;
+	background: url("../images/menu_background.png") top left;
+	padding-right: 11px;
+	-moz-border-radius: 7px;
+}
+
+#menu section{
+	margin: 11px 0 0 0px;
+	padding: 10px 10px;
+	background: url("../images/intro_background.png") repeat-x;
+	border: 1px solid #111111;
+	/* Border-radius not implemented yet */
+	-moz-border-radius: 7px;
+}
+
+#menu section:hover{
+	margin: 11px 0 0 0px;
+	padding-bottom: 15px;
+	padding-top: 15px;
+	/* Border-radius not implemented yet */
+	-moz-border-radius: 7px;
+}
+
+/*------------------------------
+
+-------------------------------*/
+#mainContent {
+	display: table-cell;
+	padding-right: 11px;
+	padding-left: 11px;
+}
+
+/*------------------------------
+=FOOTER
+------------------------------*/
+footer {
+	position: center;
+	left: 0;
+	width: 940px;
+	background: #222;
+	-moz-border-radius: 7px;
+	
+}
+
+	footer div {
+		display: table;
+		margin: 0 auto;
+		padding: 44px 0;
+		width: 940px;
+		color: #777;
+	}
+	
+	footer div section {
+		display: table-cell;
+		width: 300px;
+	}
+		
+		
+	footer h3 {
+		color: #FFF;
+	}
+	
+	footer a {
+		color: #999;
+	}
+	
+	footer a:hover {
+		color: #FFF;
+		text-decoration: none;
+	}
+	
+	footer ul {
+		margin: 0 0 0 40px;
+		list-style: square;
+		color: #565656;
+	}
+	
+	footer ul li a {
+		display: block;
+	}
