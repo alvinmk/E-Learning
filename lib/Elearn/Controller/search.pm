@@ -40,12 +40,16 @@ sub list :Chained('/') :Args(){
 }
 
 =head2 search
-
+	Start of the search chain, just sets the template to use
 =cut
 sub search :Chained('/') CaptureArgs(0){
 	my ($self, $c) = @_;	
 	$c->stash(template =>'search/list.tt');	
 }
+
+=head2 tags
+	Search by tags. Takes a list of tags and searches through the database for hits
+=cut
 
 sub tags :Chained('search') :Args(){
 	my ($self, $c, @tags) = @_;
@@ -219,26 +223,20 @@ sub getRemembered :Chained('search'){
 
 sub getRecomended :Chained('search'){
 	my ($self, $c) = @_;
-	my @result;
 	my @lectures = $c->model('ElearnDB::lecture')->find({recomended => 1});	
-	for my $lecture (@lectures){
-		if(defined $lecture){
-			push(@result, {name => $lecture->name(), id => $lecture->id(),creator => $lecture->creator(), description => $lecture->description()} );
-		}
-	}
+	$c->forward('getInfoFromResultSet', \@lectures);
 	$c->stash(header => "Recomended lectures");
-	$c->stash(list => \@result);	
 }
 
-=head2 getLecturesInfoFromID
-	Takes a list of lecture primary keys and returns all lecture info
+=head2 getLecturesInfoFromResultSet
+	Takes a list of resultsets sorts it and makes it uniqe and returns all lecture info
 =cut
 
-sub getLecturesInfoFromId :Action{
-	my ($self, $c, @primaryKeys) = @_;
+sub getInfoFromResultSet :Action{
+	my ($self, $c, @lectures) = @_;
 	my @result;
-	for my $id (@primaryKeys){
-		my $lecture = $c->model('ElearnDB::lecture')->find({filename => $id});	
+	@lectures = uniq(@lectures);
+	for my $lecture (@lectures){		
 		if(defined $lecture){
 			push(@result, {name => $lecture->name(), id => $lecture->id(),creator => $lecture->creator(), description => $lecture->description()} );
 		}

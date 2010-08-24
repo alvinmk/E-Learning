@@ -20,7 +20,7 @@ Catalyst Controller.
 
 
 =head2 addQuestions
-
+		Let the user add a question to a lecture for other students to answer. 
 =cut
 
 sub addQuestion :Local :Args(0){
@@ -63,8 +63,10 @@ sub getNewQuestion :Local :Args(2){
 			question => $questionNumber		
 		});
 	}	
-	$c->forward("/questions/getLectureQuestions/$id");
+	#Get a new question from the getLectureQuestion sub
+	$c->forward("/questions/getLectureQuestions",$id);
 	$c->res->header('application/json');
+	#Extract the question from the stash and put it into json
 	my $question = $c->stash()->{question};
 	my $alternatives = $c->stash()->{alternatives};
 	$questionNumber = $c->stash()->{questionNumber};
@@ -72,16 +74,22 @@ sub getNewQuestion :Local :Args(2){
 	$c->res->body(to_json({question => $question, alternatives => $alternatives, questionNumber => $questionNumber, questionUser => $user, previousQuestion => $questionFeedback}));
 }
 
+=head2 getLectureQuestion
+	Gets a random question from the DB and puts it on the stash
+=cut
+
 sub getLectureQuestions :Local :Args(1){
 	my ($self, $c, $id) = @_;
 	my @questions = $c->model('ElearnDB::lectureQuestions')->search({lecture => $id});
 	if(defined $questions[0]){
+		#Shuffle the result list and take the first question in the list and put it on the stash
 		@questions = shuffle(@questions);
 		my @alternatives;
 	
 		push(@alternatives, $questions[0]->alternative1());
 		push(@alternatives, $questions[0]->alternative2());
 		push(@alternatives, $questions[0]->answer());
+		#Shuffle the alternatives
 		@alternatives = shuffle(@alternatives);
 		$c->stash(question => $questions[0]->question());
 		$c->stash(questionNumber => $questions[0]->question_id());

@@ -20,11 +20,6 @@ Catalyst Controller.
 
 =cut
 
-sub watch1 : PathParth('watch') Chained('/')  CaptureArgs(1){
-	my ($self, $c, $id) = @_;
-	$c->forward("watch/$id");
-}
-
 =head2 watch
 	Serves the lecture and all information
 =cut
@@ -64,10 +59,12 @@ sub watched :Local :Args(1){
 	my ($self, $c, $id) = @_;
 	my $lecture = $c->model('ElearnDB::lecture')->find($id);
 	$lecture->update({times_watched => $lecture->times_watched()+1});
+	#Make sure there is a record in the DB for the user and lecture
 	my $lecture_data = $c->model('ElearnDB::userLectureData')->update_or_create({
 		lecture => $id,
 		user => $c->forward('/getUserName'),
 	});
+	#And uptade the count
 	$lecture_data->update({times_watched => $lecture_data->times_watched()+1});
 	$c->res->output("200 OK");
 }
