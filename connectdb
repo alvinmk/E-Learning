@@ -1,1 +1,0 @@
-script/elearn_create.pl model ElearnDB DBIC::Schema Elearn::Schema::ElearnDB create=static dbi:mysql:E_Learning 'elearn' '' '{ AutoCommit => 1 }'
