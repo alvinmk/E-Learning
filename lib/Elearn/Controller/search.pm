@@ -35,8 +35,7 @@ sub list :Chained('/') :Args(){
 	$c->stash(list => \@items);
 	$c->stash(result => \@ids);
 	$c->stash(header => ["All"] );	
-	$c->stash(template =>'search/list.tt');
-	
+	$c->stash(template =>'search/list.tt');	
 }
 
 =head2 search
@@ -53,17 +52,11 @@ sub search :Chained('/') CaptureArgs(0){
 
 sub tags :Chained('search') :Args(){
 	my ($self, $c, @tags) = @_;
-	$c->forward('getLectureFromTags',@tags);
-	my $lectures = $c->stash()->{result};	
-	my @result;
-	@$lectures = uniq(@$lectures);
-	for my $id (@$lectures){
-		$c->log->debug($id);
-		my $lecture = $c->model('ElearnDB::lecture')->find({filename => $id});
-		push(@result, {name => $lecture->name(), id => $lecture->id(), creator => $lecture->creator(), description => $lecture->description()} );
-	}
+	$c->forward('getLectureFromTags',\@tags);
+	my $tmp = $c->stash()->{result};	
+	my @lectures = @$tmp;
+	$c->forward('getInfoFromID',\@lectures);
 	$c->stash(header =>[@tags]);
-	$c->stash(list => [@result]);	
 }
 
 =head2 text
@@ -75,31 +68,34 @@ sub text :Chained('search') :Args(0){
 	my $tmp;
 	my @lectures;
 	my $category = $c->request->params->{category}|| 'N/A';;
-	my @args = split(" ",$searchString);;
+	my @args = split(" ",$searchString);
+	#Empty string, match everything
 	if($searchString eq 'Any'){
 		$c->forward('list');
 		$tmp =$c->stash()->{result};
 		@lectures = @$tmp;
 	}
+	#Matches the query against tags, description and name
+	#Results are returned as a list of ids
 	else{
-		$c->forward("getLectureFromTags",[@args]);
+		$c->forward("getLectureFromTags",\@args);
 		$tmp =$c->stash()->{result};
 		@lectures = @$tmp;	
-		$c->forward("getLectureFromDescription",[@args]);
+		$c->forward("getLectureFromDescription",\@args);
 		$tmp =$c->stash()->{result};
 		push(@lectures,@$tmp);
-		$tmp = $c->forward("getLectureFromName",[@args]);
+		$tmp = $c->forward("getLectureFromName",\@args);
 		$tmp =$c->stash()->{result};
 		push(@lectures,@$tmp);
 	}
+	#Make sure all the ids are unique
 	@lectures = uniq(@lectures);	
 	my @result;
+	#If the category is any, all hits should be displayed
 	if($category eq 'any'){
-		for my $id (@lectures){
-			my $lecture = $c->model('ElearnDB::lecture')->find({filename => $id});
-			push(@result, {name => $lecture->name(), id => $lecture->id(), description => $lecture->description()} );
-		}
+		$c->forward('getInfoFromID',\@lectures);
 	}
+	#Otherwise only lectures with the coresponding category should be shown
 	else{
 		for my $id (@lectures){
 			my $lecture = $c->model('ElearnDB::lecture')->search({filename => $id, category => $category})->single();
@@ -114,18 +110,14 @@ sub text :Chained('search') :Args(0){
 }
 
 =head2 creator
-Get all lectures from a specific user
+	Get all lectures from a specific user
 =cut
 
 sub creator :Chained('search') :Args(1){
 	my ($self, $c, $creator) = @_;
 	my @lectures = $c->model('ElearnDB::lecture')->search({creator => $creator});
-	my @result;	
-	for my $lecture (@lectures){
-		push(@result, {name => $lecture->name(), id => $lecture->id(),creator => $lecture->creator(), description => $lecture->description()} );
-	}
+	$c->forward('getInfoFromResultset', \@lectures);
 	$c->stash(header => "Author, $creator");
-	$c->stash(list => \@result);		
 }
 
 =head2 getWatchedLectures
@@ -134,23 +126,17 @@ sub creator :Chained('search') :Args(1){
 sub getWatchedLectures :Chained('search') :Args(2){
 	my ($self, $c, $condition, $nr) = @_;
 	my @lectures = $c->model('ElearnDB::lecture')->search({times_watched => {$condition ,$nr}});
-	my @result;	
-	for my $lecture (@lectures){
-		push(@result, {name => $lecture->name(), id => $lecture->id(),creator => $lecture->creator(), description => $lecture->description()} );
-	$c->stash(header => "Watched lectures");
-	$c->stash(list => \@result);		
-	}
+	$c->forward('getInfoFromResultset', \@lectures);
+	$c->stash(header => "Watched lectures");		
 }
 
 =head2 getLectureFromTags
 		Takes a list of tags and returns a list of lectures (primary key: filename) with matching tags
 =cut
 
-sub getLectureFromTags :Action()
-{
+sub getLectureFromTags :Action(){
 	my ($self, $c, @tags) = @_;
 	my @lectures;
-	$c->log->debug("Searching for tags: ");
 	my @hits;	
 	for my $tag (@tags){
 		push(@hits, $c->model('ElearnDB::lectureHasTags')->search({tag => $tag}));
@@ -158,7 +144,7 @@ sub getLectureFromTags :Action()
 	for my $id (@hits){
 		push(@lectures, $id->lectureid()->filename);
 	}
-	$c->stash({list => \@lectures}); #puts all the data on the stash
+	$c->stash(result => \@lectures); #puts all the data on the stash
 }
 
 =head2 getLectureFromDescription
@@ -176,7 +162,7 @@ sub getLectureFromDescription :Action(){
 	for my $id (@hits){
 		push(@lectures, $id->filename);
 	}
-	$c->stash({result => \@lectures});
+	$c->stash(result => \@lectures);
 }
 
 =head2 getLectureFromName
@@ -195,7 +181,7 @@ sub getLectureFromName :Action() {
 	for my $id (@hits){
 		push(@lectures, $id->filename);
 	}
-	$c->stash({result => \@lectures});
+	$c->stash(result => \@lectures);
 }
 
 =head2 getRemembered
@@ -205,16 +191,13 @@ sub getLectureFromName :Action() {
 sub getRemembered :Chained('search'){
 	my ($self, $c) = @_;
 	my @found_lectures=  $c->model('ElearnDB::userLectureData')->search({ user => $c->forward('/getUserName'), favorite => 1});
-	my @result;
 	my @lectures;
+	#Find all lectures in the lecture database
 	for my $hit (@found_lectures){
-		push(@lectures, $c->model('ElearnDB::lecture')->find({filename => $hit->lecture()}));
+		push(@lectures, $c->model('ElearnDB::lecture')->find({filename => $hit->lecture->filename()}));
 	}
-	for my $lecture (@lectures){
-		push(@result, {name => $lecture->name(), id => $lecture->id(),creator => $lecture->creator(), description => $lecture->description()} );
-	}
+	$c->forward('getInfoFromResultset', \@lectures);
 	$c->stash(header => "Remembered lectures");
-	$c->stash(list => \@result);	
 }
 
 =head2 getRecomended
@@ -224,24 +207,38 @@ sub getRemembered :Chained('search'){
 sub getRecomended :Chained('search'){
 	my ($self, $c) = @_;
 	my @lectures = $c->model('ElearnDB::lecture')->find({recomended => 1});	
-	$c->forward('getInfoFromResultSet', \@lectures);
+	$c->forward('getInfoFromResultset', \@lectures);
 	$c->stash(header => "Recomended lectures");
 }
 
-=head2 getLecturesInfoFromResultSet
+=head2 getInfoFromResultset
 	Takes a list of resultsets sorts it and makes it uniqe and returns all lecture info
 =cut
 
-sub getInfoFromResultSet :Action{
+sub getInfoFromResultset :Action{
 	my ($self, $c, @lectures) = @_;
 	my @result;
-	@lectures = uniq(@lectures);
 	for my $lecture (@lectures){		
 		if(defined $lecture){
 			push(@result, {name => $lecture->name(), id => $lecture->id(),creator => $lecture->creator(), description => $lecture->description()} );
 		}
 	}
 	$c->stash(list => \@result);
+}
+
+=head2 getInfoFromID
+	Takes a list of ids and finds the coresponding lectures, then uses getInfoFromResultset to put the data on the stash
+=cut
+
+sub getInfoFromID :Action{
+	my ($self, $c, @ids) = @_;
+	@ids = uniq(@ids);
+	my @lectures;
+	for my $id (@ids){
+		$c->log->debug("Looking for id: $id");
+		push(@lectures,$c->model('ElearnDB::lecture')->find({filename => $id}));
+	}
+	$c->forward('getInfoFromResultset', \@lectures);
 }
 =head1 AUTHOR
 
