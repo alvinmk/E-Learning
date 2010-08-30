@@ -1,4 +1,4 @@
-package Elearn::Schema::ElearnDB;
+package Elearn::E_learning::Schema::ElearnDB;
 
 use strict;
 use warnings;
