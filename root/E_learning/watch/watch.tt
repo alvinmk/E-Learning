@@ -6,7 +6,7 @@
 	setVideo("[% lecturePath %]", "[% lecture %]","[% fileExtension %]");
 	var questionNumber="[% questionNumber %]";
 </script>
-<link rel="stylesheet" href=[% c.uri_for('/static/css/watch.css') %] type="text/css" media="screen" />
+<link rel="stylesheet" href=[% c.uri_for('/E_learning/static/css/watch.css') %] type="text/css" media="screen" />
 
 <div id="mainContent">
 	<section id="lecture">

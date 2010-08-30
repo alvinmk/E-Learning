@@ -1,8 +1,8 @@
-<link rel="stylesheet" href=[% c.uri_for('/static/css/search.css') %] type="text/css" media="screen" />
+<link rel="stylesheet" href=[% c.uri_for('/E_learning/static/css/search.css') %] type="text/css" media="screen" />
 <div id="mainContent">
 	<div id="searchMenu">
 		<div id="searchBar">		
-			<form action="[% c.uri_for('text') %]"  method="post" enctype="multipart/form-data">
+			<form action="[% c.uri_for('/search/text') %]"  method="post" enctype="multipart/form-data">
 				<label>
 					<input type="text" name="searchString" size="15"></td></tr>
 					<select name="category">

@@ -18,7 +18,7 @@ function stateMonitor(obj)
 {
   if(obj.newstate == "COMPLETED")
   {
-		$.post('http://localhost:3000/watch/watched/'+videoID);
+		$.post('http://localhost:3000/e_learning/watch/watched/'+videoID);
   }
 }
 
@@ -77,7 +77,7 @@ function getLinkInfo(){
 			}
 		}
 	}
-	ajaxRequest.open("POST", "/upload/link", "true");
+	ajaxRequest.open("POST", "/e_learning/upload/link", "true");
 	ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajaxRequest.setRequestHeader("Content-length", params.lenght);
 	ajaxRequest.setRequestHeader("Connection", "close");

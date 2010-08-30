@@ -1,4 +1,4 @@
-<link rel="stylesheet" href=[% c.uri_for('/static/css/search.css') %] type="text/css" media="screen" />
+<link rel="stylesheet" href=[% c.uri_for('/E_learning/static/css/search.css') %] type="text/css" media="screen" />
 <div id="mainContent">
 	<h1>Courses</h1>
 	<section id="result">

@@ -3,7 +3,7 @@
 <script language="javascrip" type="text/javascript">
 	setVideo("[% lecturePath %]", "[% lecture %]","[% fileExtension %]");
 </script>
-<link rel="stylesheet" href=[% c.uri_for('/static/css/watch.css') %] type="text/css" media="screen" />
+<link rel="stylesheet" href=[% c.uri_for('E_learning/static/css/watch.css') %] type="text/css" media="screen" />
 
 <div id="mainContent">
 <form method="POST" action="[% c.uri_for('editDone') %]" enctype="multipart/form-data" name="videoInfo">

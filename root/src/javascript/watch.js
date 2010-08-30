@@ -1,13 +1,13 @@
 function buttonClick(value){
 
 	if(value=="Thumbs up!"){
-		$.post('http://localhost:3000/watch/rateLecture/'+videoID+"/1");
+		$.post('http://localhost:3000/e_learning/watch/rateLecture/'+videoID+"/1");
 	}
 	if(value=="Thumbs down!"){
-		$.post('http://localhost:3000/watch/rateLecture/'+videoID+"/-1");
+		$.post('http://localhost:3000/e_learning/watch/rateLecture/'+videoID+"/-1");
 	}
 	if(value=="Remember this"){
-		$.post('http://localhost:3000/watch/rememberLecture/'+videoID);
+		$.post('http://localhost:3000/e_learning/watch/rememberLecture/'+videoID);
 	}
 	if(value=="Add question"){
 		document.getElementById('questions').className="hideDiv";
@@ -20,7 +20,7 @@ function buttonClick(value){
 
 function recomend()
 {
-	$.get('http://localhost:3000/admin/recomendLecture/'+videoID);	
+	$.get('http://localhost:3000/e_learning/admin/recomendLecture/'+videoID);	
 }
 
 function addQuestion(){
@@ -33,7 +33,7 @@ function addQuestion(){
 	document.getElementById('alt1').value="";
 	document.getElementById('alt2').value="";
 	$.ajax({
-		url: "http://localhost:3000/questions/addQuestion",
+		url: "http://localhost:3000/e_learning/questions/addQuestion",
 		data: ({lecture: videoID, question: question, answer: answer, alt1: alt1, alt2: alt2}),
 		datatype: 'json',
 		success: function(result){
@@ -58,7 +58,7 @@ function answer(){
 function newQuestion(answer){
 	$.ajax({
 		type: "POST",
-		url: "http://127.0.1.1:3000/questions/getNewQuestion/"+videoID+"/"+questionNumber,
+		url: "http://127.0.1.1:3000/e_learning/questions/getNewQuestion/"+videoID+"/"+questionNumber,
 		datatype: 'JSON',
 		data: {'answer':answer},
 		success: function(result){renderQuestion(result);}
