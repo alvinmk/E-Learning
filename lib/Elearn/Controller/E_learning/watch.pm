@@ -1,4 +1,4 @@
-package Elearn::Controller::watch;
+package Elearn::Controller::E_learning::watch;
 use Moose;
 use namespace::autoclean;
 use List::Util;
@@ -48,7 +48,7 @@ sub watch : Chained('/')  Args(1){
 	$c->stash(tags => [@tmp]);
 	$c->stash(template => 'watch/watch.tt');
 	$c->stash(similar => ["Not implemented", "Not implemented","Not implemented","Not implemented"]);
-	$c->forward('/questions/getLectureQuestions');
+	$c->forward('/e_learning/questions/getLectureQuestions');
 }
 
 =head2 
@@ -104,7 +104,7 @@ sub addQuestion :Local :Args(5){
 	my ($self, $c, $id, $question, $answer, $alt1, $alt2) = @_;
 	$c->model('ElearnDB::lectureQuestions')->update_or_create({
 		lecture => $id,
-		user => $c->forward('/getUserName'),
+		user => $c->forward($c->uri_for('/getUserName')),
 		answer => $answer,
 		question => $question,
 		alternative1 => $alt1,

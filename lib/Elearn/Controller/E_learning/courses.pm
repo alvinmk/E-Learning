@@ -1,4 +1,4 @@
-package Elearn::Controller::courses;
+package Elearn::Controller::E_learning::courses;
 use Moose;
 use namespace::autoclean;
 
@@ -6,7 +6,7 @@ BEGIN {extends 'Catalyst::Controller'; }
 
 =head1 NAME
 
-Elearn::Controller::courses - Catalyst Controller
+Elearn::Controller::E_learningcourses - Catalyst Controller
 
 =head1 DESCRIPTION
 

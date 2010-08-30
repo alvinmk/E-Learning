@@ -1,4 +1,4 @@
-package Elearn::Controller::documentCode;
+package Elearn::Controller::E_learning::documentCode;
 use Moose;
 use namespace::autoclean;
 use SQL::Translator;
@@ -9,7 +9,7 @@ BEGIN {extends 'Catalyst::Controller'; }
 
 =head1 NAME
 
-Elearn::Controller::documentCode - Catalyst Controller
+Elearn::Controller::E_learningdocumentCode - Catalyst Controller
 
 =head1 DESCRIPTION
 

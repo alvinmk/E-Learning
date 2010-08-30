@@ -1,4 +1,4 @@
-package Elearn::Controller::help;
+package Elearn::Controller::E_learning::help;
 use Moose;
 use namespace::autoclean;
 use URI::Escape;
@@ -7,7 +7,7 @@ BEGIN {extends 'Catalyst::Controller'; }
 
 =head1 NAME
 
-Elearn::Controller::help - Catalyst Controller
+Elearn::Controller::E_learninghelp - Catalyst Controller
 
 =head1 DESCRIPTION
 
@@ -22,7 +22,7 @@ Catalyst Controller.
 
 =cut
 
-sub help :Path :Args(0) {
+sub help :Chained('/') :Args(0) {
    my ( $self, $c ) = @_;
 	my $referer = uri_unescape($c->request->referer);
 	my $base = $c->request->base;
@@ -36,6 +36,7 @@ sub whatHelp :Action {
 	my ( $self, $c , $page, $subpage, @rest) = @_;
 	$c->log->info("$page, $subpage,$rest[0]");
 	$c->stash(help => "$subpage in $page and there was maybe some arguments like: $rest[0], $rest[1] ");
+	$c->stash(template => 'help/help.tt');
 }
 
 

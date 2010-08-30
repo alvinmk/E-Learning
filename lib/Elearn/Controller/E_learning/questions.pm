@@ -1,4 +1,4 @@
-package Elearn::Controller::questions;
+package Elearn::Controller::E_learning::questions;
 use Moose;
 use namespace::autoclean;
 use List::Util qw(first max maxstr min minstr reduce shuffle sum);
@@ -8,7 +8,7 @@ BEGIN {extends 'Catalyst::Controller'; }
 
 =head1 NAME
 
-Elearn::Controller::questions - Catalyst Controller
+Elearn::Controller::E_learningquestions - Catalyst Controller
 
 =head1 DESCRIPTION
 
@@ -64,7 +64,7 @@ sub getNewQuestion :Local :Args(2){
 		});
 	}	
 	#Get a new question from the getLectureQuestion sub
-	$c->forward("/questions/getLectureQuestions",$id);
+	$c->forward("getLectureQuestions",$id);
 	$c->res->header('application/json');
 	#Extract the question from the stash and put it into json
 	my $question = $c->stash()->{question};

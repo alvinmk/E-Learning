@@ -1,4 +1,4 @@
-package Elearn::Controller::search;
+package Elearn::Controller::E_learning::search;
 use Moose;
 use namespace::autoclean;
 use List::MoreUtils 'uniq';
@@ -8,7 +8,7 @@ BEGIN {extends 'Catalyst::Controller'; }
 
 =head1 NAME
 
-Elearn::Controller::search - Catalyst Controller
+Elearn::Controller::E_learningsearch - Catalyst Controller
 
 =head1 DESCRIPTION
 
@@ -103,10 +103,10 @@ sub text :Chained('search') :Args(0){
 				push(@result, {name => $lecture->name(), id => $lecture->id(), creator => $lecture->creator(), description => $lecture->description()} );
 			}
 		}
+		$c->stash(list => \@result);		
 	}
 	$c->stash(category => "in category, $category");
-	$c->stash(header =>[@args]);
-	$c->stash(list => [@result]);		
+	$c->stash(header =>\@args);	
 }
 
 =head2 creator
@@ -219,6 +219,7 @@ sub getInfoFromResultset :Action{
 	my ($self, $c, @lectures) = @_;
 	my @result;
 	for my $lecture (@lectures){		
+		$c->log->debug("getInfoFromResult ".$lecture->name());
 		if(defined $lecture){
 			push(@result, {name => $lecture->name(), id => $lecture->id(),creator => $lecture->creator(), description => $lecture->description()} );
 		}
@@ -235,7 +236,7 @@ sub getInfoFromID :Action{
 	@ids = uniq(@ids);
 	my @lectures;
 	for my $id (@ids){
-		$c->log->debug("Looking for id: $id");
+		$c->log->debug("geInfoFromID: Looking for id: $id");
 		push(@lectures,$c->model('ElearnDB::lecture')->find({filename => $id}));
 	}
 	$c->forward('getInfoFromResultset', \@lectures);

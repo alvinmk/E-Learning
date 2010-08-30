@@ -1,4 +1,4 @@
-package Elearn::Controller::upload;
+package Elearn::Controller::E_learning::upload;
 use Moose;
 use namespace::autoclean;
 use WWW::Mechanize;
@@ -15,7 +15,7 @@ BEGIN {extends 'Catalyst::Controller'; }
 
 =head1 NAME
 
-Elearn::Controller::upload - Catalyst Controller
+Elearn::Controller::E_learningupload - Catalyst Controller
 
 =head1 DESCRIPTION
 
@@ -129,7 +129,7 @@ sub editDone :Local :Args(0){
 		ID => $videoID,
 		TITLE => $title,
 		DESCRIPTION => $description,
-		CREATOR => $c->forward('/getUserName'),
+		CREATOR => $c->forward($c->uri_for('/getUserName')),
 		TAGS => [@tags],
 		CHAPTERS => $chapters,
 		CATEGORY => $category,
@@ -140,7 +140,7 @@ sub editDone :Local :Args(0){
 	$c->model('ElearnDB::lectureHasTags')->search({ lectureid => $videoID})->delete_all();
 	$c->model('ElearnDB::chapter')->search({ lectureid => $videoID})->delete_all();
 	#Update database
-	$c->forward('addToDB', [$data]);
+	$c->forward($c->uri_for('addToDB'), [$data]);
 	$c->response->redirect("/watch/$videoID");
 }
 
@@ -241,7 +241,7 @@ sub add_video :Local :Args(0){
 		ID => $videoID,
 		TITLE => $title,
 		DESCRIPTION => $description,
-		CREATOR => $c->forward('/getUserName'),
+		CREATOR => $c->forward($c->uri_for('getUserName')),
 		TAGS => [@tags],
 		CHAPTERS => $chapters,
 		CATEGORY => $category,
@@ -254,7 +254,7 @@ sub add_video :Local :Args(0){
 	print MYFILE $yaml;
 	close(MYFILE); 
 
-	$c->forward('addToDB', [$data]);
+	$c->forward($c->uri_for('addToDB'), [$data]);
 	$c->response->redirect("/watch/$videoID");
 	#Download the video in a separate process
 	my $child = fork;

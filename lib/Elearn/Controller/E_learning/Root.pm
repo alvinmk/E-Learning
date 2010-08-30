@@ -1,4 +1,4 @@
-package Elearn::Controller::Root;
+package Elearn::Controller::E_learning::Root;
 use Moose;
 use namespace::autoclean;
 
@@ -12,7 +12,7 @@ __PACKAGE__->config(namespace => '');
 
 =head1 NAME
 
-Elearn::Controller::Root - Root Controller for Elearn
+Elearn::Controller::E_learningRoot - Root Controller for Elearn
 
 =head1 DESCRIPTION
 
@@ -33,7 +33,7 @@ sub index :Path :Args(0) {
     $c->response->body( $c->welcome_message );
 }
 
-sub getUserName :Private{
+sub getUserName : Private{
 	my $user = "Uganda Ministry of Health";
 	return $user;
 }
@@ -58,9 +58,10 @@ Attempt to render a view, if needed.
 
 sub end : ActionClass('RenderView'){ 
 	my ( $self, $c ) = @_;
-	$c->stash(user => $c->forward('/getUserName'));
-	$c->forward("userdata/getUserData");
+	$c->stash(user => $c->forward('getUserName'));
+	$c->forward("/e_learning/userdata/getUserData");
 }
+
 
 =head1 AUTHOR
 
