@@ -28,7 +28,7 @@ requires:
   File::HomeDir: 0
   Gtk2::Notify: 0
   JSON: 0
-  List::Utils: 0
+  List::Util: 0
   Moose: 0
   WWW::Mechanize: 0
   YAML::XS: 0

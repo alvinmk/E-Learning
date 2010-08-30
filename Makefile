@@ -20,11 +20,11 @@
 #     NAME => q[Elearn]
 #     NO_META => q[1]
 #     PL_FILES => {  }
-#     PREREQ_PM => { Gtk2::Notify=>q[0], Catalyst::Plugin::ConfigLoader=>q[0], YAML::XS=>q[0], List::Utils=>q[0], Config::General=>q[0], Moose=>q[0], File::Copy=>q[0], namespace::autoclean=>q[0], Catalyst::Plugin::Static::Simple=>q[0], File::HomeDir=>q[0], ExtUtils::MakeMaker=>q[6.42], WWW::Mechanize=>q[0], Catalyst::Action::RenderView=>q[0], File::Basename=>q[0], JSON=>q[0], Catalyst::Runtime=>q[5.80022] }
+#     PREREQ_PM => { Gtk2::Notify=>q[0], Catalyst::Plugin::ConfigLoader=>q[0], YAML::XS=>q[0], List::Util=>q[0], Config::General=>q[0], Moose=>q[0], File::Copy=>q[0], namespace::autoclean=>q[0], Catalyst::Plugin::Static::Simple=>q[0], File::HomeDir=>q[0], ExtUtils::MakeMaker=>q[6.42], WWW::Mechanize=>q[0], Catalyst::Action::RenderView=>q[0], File::Basename=>q[0], JSON=>q[0], Catalyst::Runtime=>q[5.80022] }
 #     VERSION => q[0.01]
 #     dist => { PREOP=>q[$(PERL) -I. "-MModule::Install::Admin" -e "dist_preop(q($(DISTVNAME)))"] }
 #     realclean => { FILES=>q[MYMETA.yml] }
-#     test => { TESTS=>q[t/01app.t t/02pod.t t/03podcoverage.t t/controller_search.t t/controller_userData.t t/model_ElearnDB.t] }
+#     test => { TESTS=>q[t/01app.t t/02pod.t t/03podcoverage.t t/controller_admin.t t/controller_courses.t t/controller_createLecture.t t/controller_documentCode.t t/controller_E_learning-Test.t t/controller_help.t t/controller_questions.t t/controller_search.t t/controller_userData.t t/model_ElearnDB.t] }
 
 # --- MakeMaker post_initialize section:
 
@@ -172,13 +172,19 @@ MAN1PODS = script/elearn_cgi.pl \
 	script/elearn_server.pl \
 	script/elearn_test.pl
 MAN3PODS = lib/Elearn.pm \
-	lib/Elearn/Controller/Root.pm \
-	lib/Elearn/Controller/search.pm \
-	lib/Elearn/Controller/upload.pm \
-	lib/Elearn/Controller/userData.pm \
-	lib/Elearn/Controller/watch.pm \
-	lib/Elearn/Model/ElearnDB.pm \
-	lib/Elearn/View/TT.pm
+	lib/Elearn/Controller/E_learning/Root.pm \
+	lib/Elearn/Controller/E_learning/admin.pm \
+	lib/Elearn/Controller/E_learning/courses.pm \
+	lib/Elearn/Controller/E_learning/createLecture.pm \
+	lib/Elearn/Controller/E_learning/documentCode.pm \
+	lib/Elearn/Controller/E_learning/help.pm \
+	lib/Elearn/Controller/E_learning/questions.pm \
+	lib/Elearn/Controller/E_learning/search.pm \
+	lib/Elearn/Controller/E_learning/upload.pm \
+	lib/Elearn/Controller/E_learning/userData.pm \
+	lib/Elearn/Controller/E_learning/watch.pm \
+	lib/Elearn/Model/E_learning/ElearnDB.pm \
+	lib/Elearn/View/E_learning/E_LearningTT.pm
 
 # Where is the Config information that we are using/depend on
 CONFIGDEP = $(PERL_ARCHLIB)$(DFSEP)Config.pm $(PERL_INC)$(DFSEP)config.h
@@ -201,67 +207,178 @@ PERL_ARCHIVE_AFTER =
 
 
 TO_INST_PM = lib/Elearn.pm \
-	lib/Elearn/Controller/Root.pm \
-	lib/Elearn/Controller/search.pm \
-	lib/Elearn/Controller/upload.pm \
-	lib/Elearn/Controller/userData.pm \
-	lib/Elearn/Controller/watch.pm \
-	lib/Elearn/Model/ElearnDB.pm \
-	lib/Elearn/Schema/ElearnDB.pm \
-	lib/Elearn/Schema/ElearnDB/Result/Categories.pm \
-	lib/Elearn/Schema/ElearnDB/Result/Chapter.pm \
-	lib/Elearn/Schema/ElearnDB/Result/Courses.pm \
-	lib/Elearn/Schema/ElearnDB/Result/Feedback.pm \
-	lib/Elearn/Schema/ElearnDB/Result/Lecture.pm \
-	lib/Elearn/Schema/ElearnDB/Result/LectureHasTags.pm \
-	lib/Elearn/Schema/ElearnDB/Result/LectureQuestions.pm \
-	lib/Elearn/Schema/ElearnDB/Result/Tags.pm \
-	lib/Elearn/Schema/ElearnDB/Result/UserLectureData.pm \
-	lib/Elearn/View/TT.pm \
-	lib/Elearn/View/TT.pm.u1conflict \
+	lib/Elearn.pm.bak \
+	lib/Elearn/Controller/E_learning/Root.pm \
+	lib/Elearn/Controller/E_learning/admin.pm \
+	lib/Elearn/Controller/E_learning/courses.pm \
+	lib/Elearn/Controller/E_learning/createLecture.pm \
+	lib/Elearn/Controller/E_learning/documentCode.pm \
+	lib/Elearn/Controller/E_learning/help.pm \
+	lib/Elearn/Controller/E_learning/questions.pm \
+	lib/Elearn/Controller/E_learning/search.pm \
+	lib/Elearn/Controller/E_learning/upload.pm \
+	lib/Elearn/Controller/E_learning/userData.pm \
+	lib/Elearn/Controller/E_learning/watch.pm \
+	lib/Elearn/Controller/Root.pm.bak \
+	lib/Elearn/Controller/admin.pm.bak \
+	lib/Elearn/Controller/courses.pm.bak \
+	lib/Elearn/Controller/createLecture.pm.bak \
+	lib/Elearn/Controller/documentCode.pm.bak \
+	lib/Elearn/Controller/help.pm.bak \
+	lib/Elearn/Controller/questions.pm.bak \
+	lib/Elearn/Controller/search.pm.bak \
+	lib/Elearn/Controller/upload.pm.bak \
+	lib/Elearn/Controller/userData.pm.bak \
+	lib/Elearn/Controller/watch.pm.bak \
+	lib/Elearn/Model/E_learning/ElearnDB.pm \
+	lib/Elearn/Model/ElearnDB.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Categories.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Categories.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Chapter.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Chapter.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/CourseModule.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/CourseModule.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Courses.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Courses.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Feedback.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Feedback.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Lecture.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Lecture.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/LectureHasTags.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/LectureHasTags.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/LectureQuestions.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/LectureQuestions.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Tags.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Tags.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/UserLectureData.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/UserLectureData.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/UserQuestionAnswers.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/UserQuestionAnswers.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/UserWatchedLecture.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/UserWatchedLecture.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Users.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Users.pm.bak \
+	lib/Elearn/Schema/ElearnDB.pm.bak \
+	lib/Elearn/View/E_LearningTT.pm.bak \
+	lib/Elearn/View/E_learning/E_LearningTT.pm \
 	lib/youtube_download.pl \
-	test.pm
+	lib/youtube_download.pl.bak
 
-PM_TO_BLIB = lib/Elearn/Controller/watch.pm \
-	blib/lib/Elearn/Controller/watch.pm \
-	lib/Elearn/Schema/ElearnDB/Result/LectureQuestions.pm \
-	blib/lib/Elearn/Schema/ElearnDB/Result/LectureQuestions.pm \
-	lib/Elearn/Schema/ElearnDB/Result/Chapter.pm \
-	blib/lib/Elearn/Schema/ElearnDB/Result/Chapter.pm \
-	lib/Elearn/Schema/ElearnDB/Result/Courses.pm \
-	blib/lib/Elearn/Schema/ElearnDB/Result/Courses.pm \
-	lib/Elearn/Controller/userData.pm \
-	blib/lib/Elearn/Controller/userData.pm \
-	test.pm \
-	$(INST_LIB)/test.pm \
-	lib/Elearn/Model/ElearnDB.pm \
-	blib/lib/Elearn/Model/ElearnDB.pm \
-	lib/Elearn/Controller/upload.pm \
-	blib/lib/Elearn/Controller/upload.pm \
-	lib/Elearn/View/TT.pm \
-	blib/lib/Elearn/View/TT.pm \
+PM_TO_BLIB = lib/Elearn/Controller/E_learning/courses.pm \
+	blib/lib/Elearn/Controller/E_learning/courses.pm \
+	lib/Elearn/Controller/questions.pm.bak \
+	blib/lib/Elearn/Controller/questions.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Categories.pm \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Categories.pm \
+	lib/Elearn/Controller/search.pm.bak \
+	blib/lib/Elearn/Controller/search.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/LectureHasTags.pm \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/LectureHasTags.pm \
+	lib/Elearn/Controller/watch.pm.bak \
+	blib/lib/Elearn/Controller/watch.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/CourseModule.pm.bak \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/CourseModule.pm.bak \
+	lib/Elearn/Controller/documentCode.pm.bak \
+	blib/lib/Elearn/Controller/documentCode.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/UserLectureData.pm.bak \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/UserLectureData.pm.bak \
+	lib/Elearn/Controller/courses.pm.bak \
+	blib/lib/Elearn/Controller/courses.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Chapter.pm \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Chapter.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Categories.pm.bak \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Categories.pm.bak \
+	lib/Elearn/Controller/E_learning/documentCode.pm \
+	blib/lib/Elearn/Controller/E_learning/documentCode.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Feedback.pm \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Feedback.pm \
 	lib/Elearn.pm \
 	blib/lib/Elearn.pm \
-	lib/Elearn/Schema/ElearnDB/Result/Tags.pm \
-	blib/lib/Elearn/Schema/ElearnDB/Result/Tags.pm \
-	lib/Elearn/Schema/ElearnDB/Result/Categories.pm \
-	blib/lib/Elearn/Schema/ElearnDB/Result/Categories.pm \
-	lib/Elearn/Controller/search.pm \
-	blib/lib/Elearn/Controller/search.pm \
-	lib/Elearn/Schema/ElearnDB/Result/LectureHasTags.pm \
-	blib/lib/Elearn/Schema/ElearnDB/Result/LectureHasTags.pm \
-	lib/Elearn/Schema/ElearnDB/Result/Feedback.pm \
-	blib/lib/Elearn/Schema/ElearnDB/Result/Feedback.pm \
-	lib/Elearn/Controller/Root.pm \
-	blib/lib/Elearn/Controller/Root.pm \
-	lib/Elearn/Schema/ElearnDB.pm \
-	blib/lib/Elearn/Schema/ElearnDB.pm \
-	lib/Elearn/Schema/ElearnDB/Result/UserLectureData.pm \
-	blib/lib/Elearn/Schema/ElearnDB/Result/UserLectureData.pm \
-	lib/Elearn/View/TT.pm.u1conflict \
-	blib/lib/Elearn/View/TT.pm.u1conflict \
-	lib/Elearn/Schema/ElearnDB/Result/Lecture.pm \
-	blib/lib/Elearn/Schema/ElearnDB/Result/Lecture.pm \
+	lib/youtube_download.pl.bak \
+	blib/lib/youtube_download.pl.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/LectureQuestions.pm \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/LectureQuestions.pm \
+	lib/Elearn/Controller/E_learning/createLecture.pm \
+	blib/lib/Elearn/Controller/E_learning/createLecture.pm \
+	lib/Elearn/Controller/admin.pm.bak \
+	blib/lib/Elearn/Controller/admin.pm.bak \
+	lib/Elearn/Controller/E_learning/userData.pm \
+	blib/lib/Elearn/Controller/E_learning/userData.pm \
+	lib/Elearn/Controller/createLecture.pm.bak \
+	blib/lib/Elearn/Controller/createLecture.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB.pm \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Courses.pm.bak \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Courses.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Users.pm \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Users.pm \
+	lib/Elearn.pm.bak \
+	blib/lib/Elearn.pm.bak \
+	lib/Elearn/Schema/ElearnDB.pm.bak \
+	blib/lib/Elearn/Schema/ElearnDB.pm.bak \
+	lib/Elearn/Controller/upload.pm.bak \
+	blib/lib/Elearn/Controller/upload.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/UserQuestionAnswers.pm.bak \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/UserQuestionAnswers.pm.bak \
+	lib/Elearn/Controller/userData.pm.bak \
+	blib/lib/Elearn/Controller/userData.pm.bak \
+	lib/Elearn/Model/E_learning/ElearnDB.pm \
+	blib/lib/Elearn/Model/E_learning/ElearnDB.pm \
+	lib/Elearn/Model/ElearnDB.pm.bak \
+	blib/lib/Elearn/Model/ElearnDB.pm.bak \
+	lib/Elearn/Controller/E_learning/questions.pm \
+	blib/lib/Elearn/Controller/E_learning/questions.pm \
+	lib/Elearn/Controller/E_learning/help.pm \
+	blib/lib/Elearn/Controller/E_learning/help.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Lecture.pm \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Lecture.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/UserWatchedLecture.pm \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/UserWatchedLecture.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/UserLectureData.pm \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/UserLectureData.pm \
+	lib/Elearn/Controller/E_learning/admin.pm \
+	blib/lib/Elearn/Controller/E_learning/admin.pm \
+	lib/Elearn/Controller/E_learning/search.pm \
+	blib/lib/Elearn/Controller/E_learning/search.pm \
+	lib/Elearn/Controller/help.pm.bak \
+	blib/lib/Elearn/Controller/help.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Tags.pm \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Tags.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/UserWatchedLecture.pm.bak \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/UserWatchedLecture.pm.bak \
+	lib/Elearn/View/E_LearningTT.pm.bak \
+	blib/lib/Elearn/View/E_LearningTT.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/UserQuestionAnswers.pm \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/UserQuestionAnswers.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/CourseModule.pm \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/CourseModule.pm \
+	lib/Elearn/Controller/E_learning/Root.pm \
+	blib/lib/Elearn/Controller/E_learning/Root.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Tags.pm.bak \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Tags.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/LectureQuestions.pm.bak \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/LectureQuestions.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Lecture.pm.bak \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Lecture.pm.bak \
+	lib/Elearn/View/E_learning/E_LearningTT.pm \
+	blib/lib/Elearn/View/E_learning/E_LearningTT.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/LectureHasTags.pm.bak \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/LectureHasTags.pm.bak \
+	lib/Elearn/Controller/Root.pm.bak \
+	blib/lib/Elearn/Controller/Root.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Feedback.pm.bak \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Feedback.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Chapter.pm.bak \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Chapter.pm.bak \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Users.pm.bak \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Users.pm.bak \
+	lib/Elearn/Controller/E_learning/upload.pm \
+	blib/lib/Elearn/Controller/E_learning/upload.pm \
+	lib/Elearn/Controller/E_learning/watch.pm \
+	blib/lib/Elearn/Controller/E_learning/watch.pm \
+	lib/Elearn/Schema/E_learning/ElearnDB/Result/Courses.pm \
+	blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Courses.pm \
 	lib/youtube_download.pl \
 	blib/lib/youtube_download.pl
 
@@ -490,14 +607,20 @@ manifypods : pure_all  \
 	script/elearn_cgi.pl \
 	script/elearn_create.pl \
 	script/elearn_test.pl \
-	lib/Elearn/Controller/Root.pm \
-	lib/Elearn/Controller/upload.pm \
-	lib/Elearn/Controller/watch.pm \
-	lib/Elearn/View/TT.pm \
-	lib/Elearn/Controller/userData.pm \
-	lib/Elearn/Controller/search.pm \
+	lib/Elearn/Controller/E_learning/createLecture.pm \
+	lib/Elearn/Controller/E_learning/userData.pm \
+	lib/Elearn/Controller/E_learning/questions.pm \
+	lib/Elearn/Controller/E_learning/courses.pm \
+	lib/Elearn/Controller/E_learning/help.pm \
+	lib/Elearn/View/E_learning/E_LearningTT.pm \
+	lib/Elearn/Controller/E_learning/admin.pm \
+	lib/Elearn/Controller/E_learning/search.pm \
+	lib/Elearn/Controller/E_learning/upload.pm \
+	lib/Elearn/Controller/E_learning/watch.pm \
 	lib/Elearn.pm \
-	lib/Elearn/Model/ElearnDB.pm
+	lib/Elearn/Controller/E_learning/documentCode.pm \
+	lib/Elearn/Controller/E_learning/Root.pm \
+	lib/Elearn/Model/E_learning/ElearnDB.pm
 	$(NOECHO) $(POD2MAN) --section=$(MAN1EXT) --perm_rw=$(PERM_RW) \
 	  script/elearn_server.pl $(INST_MAN1DIR)/elearn_server.pl.$(MAN1EXT) \
 	  script/elearn_fastcgi.pl $(INST_MAN1DIR)/elearn_fastcgi.pl.$(MAN1EXT) \
@@ -505,14 +628,20 @@ manifypods : pure_all  \
 	  script/elearn_create.pl $(INST_MAN1DIR)/elearn_create.pl.$(MAN1EXT) \
 	  script/elearn_test.pl $(INST_MAN1DIR)/elearn_test.pl.$(MAN1EXT) 
 	$(NOECHO) $(POD2MAN) --section=$(MAN3EXT) --perm_rw=$(PERM_RW) \
-	  lib/Elearn/Controller/Root.pm $(INST_MAN3DIR)/Elearn::Controller::Root.$(MAN3EXT) \
-	  lib/Elearn/Controller/upload.pm $(INST_MAN3DIR)/Elearn::Controller::upload.$(MAN3EXT) \
-	  lib/Elearn/Controller/watch.pm $(INST_MAN3DIR)/Elearn::Controller::watch.$(MAN3EXT) \
-	  lib/Elearn/View/TT.pm $(INST_MAN3DIR)/Elearn::View::TT.$(MAN3EXT) \
-	  lib/Elearn/Controller/userData.pm $(INST_MAN3DIR)/Elearn::Controller::userData.$(MAN3EXT) \
-	  lib/Elearn/Controller/search.pm $(INST_MAN3DIR)/Elearn::Controller::search.$(MAN3EXT) \
+	  lib/Elearn/Controller/E_learning/createLecture.pm $(INST_MAN3DIR)/Elearn::Controller::E_learning::createLecture.$(MAN3EXT) \
+	  lib/Elearn/Controller/E_learning/userData.pm $(INST_MAN3DIR)/Elearn::Controller::E_learning::userData.$(MAN3EXT) \
+	  lib/Elearn/Controller/E_learning/questions.pm $(INST_MAN3DIR)/Elearn::Controller::E_learning::questions.$(MAN3EXT) \
+	  lib/Elearn/Controller/E_learning/courses.pm $(INST_MAN3DIR)/Elearn::Controller::E_learning::courses.$(MAN3EXT) \
+	  lib/Elearn/Controller/E_learning/help.pm $(INST_MAN3DIR)/Elearn::Controller::E_learning::help.$(MAN3EXT) \
+	  lib/Elearn/View/E_learning/E_LearningTT.pm $(INST_MAN3DIR)/Elearn::View::E_learning::E_LearningTT.$(MAN3EXT) \
+	  lib/Elearn/Controller/E_learning/admin.pm $(INST_MAN3DIR)/Elearn::Controller::E_learning::admin.$(MAN3EXT) \
+	  lib/Elearn/Controller/E_learning/search.pm $(INST_MAN3DIR)/Elearn::Controller::E_learning::search.$(MAN3EXT) \
+	  lib/Elearn/Controller/E_learning/upload.pm $(INST_MAN3DIR)/Elearn::Controller::E_learning::upload.$(MAN3EXT) \
+	  lib/Elearn/Controller/E_learning/watch.pm $(INST_MAN3DIR)/Elearn::Controller::E_learning::watch.$(MAN3EXT) \
 	  lib/Elearn.pm $(INST_MAN3DIR)/Elearn.$(MAN3EXT) \
-	  lib/Elearn/Model/ElearnDB.pm $(INST_MAN3DIR)/Elearn::Model::ElearnDB.$(MAN3EXT) 
+	  lib/Elearn/Controller/E_learning/documentCode.pm $(INST_MAN3DIR)/Elearn::Controller::E_learning::documentCode.$(MAN3EXT) \
+	  lib/Elearn/Controller/E_learning/Root.pm $(INST_MAN3DIR)/Elearn::Controller::E_learning::Root.$(MAN3EXT) \
+	  lib/Elearn/Model/E_learning/ElearnDB.pm $(INST_MAN3DIR)/Elearn::Model::E_learning::ElearnDB.$(MAN3EXT) 
 
 
 
@@ -858,7 +987,7 @@ $(MAKE_APERL_FILE) : $(FIRST_MAKEFILE) pm_to_blib
 TEST_VERBOSE=0
 TEST_TYPE=test_$(LINKTYPE)
 TEST_FILE = test.pl
-TEST_FILES = t/01app.t t/02pod.t t/03podcoverage.t t/controller_search.t t/controller_userData.t t/model_ElearnDB.t
+TEST_FILES = t/01app.t t/02pod.t t/03podcoverage.t t/controller_admin.t t/controller_courses.t t/controller_createLecture.t t/controller_documentCode.t t/controller_E_learning-Test.t t/controller_help.t t/controller_questions.t t/controller_search.t t/controller_userData.t t/model_ElearnDB.t
 TESTDB_SW = -d
 
 testdb :: testdb_$(LINKTYPE)
@@ -899,7 +1028,7 @@ ppd :
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="File::HomeDir" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Gtk2::Notify" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="JSON::" />' >> $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '        <REQUIRE NAME="List::Utils" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="List::Util" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Moose::" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="WWW::Mechanize" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="YAML::XS" />' >> $(DISTNAME).ppd
@@ -914,26 +1043,65 @@ ppd :
 
 pm_to_blib : $(FIRST_MAKEFILE) $(TO_INST_PM)
 	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e 'pm_to_blib({@ARGV}, '\''$(INST_LIB)/auto'\'', q[$(PM_FILTER)], '\''$(PERM_DIR)'\'')' -- \
-	  lib/Elearn/Controller/watch.pm blib/lib/Elearn/Controller/watch.pm \
-	  lib/Elearn/Schema/ElearnDB/Result/LectureQuestions.pm blib/lib/Elearn/Schema/ElearnDB/Result/LectureQuestions.pm \
-	  lib/Elearn/Schema/ElearnDB/Result/Chapter.pm blib/lib/Elearn/Schema/ElearnDB/Result/Chapter.pm \
-	  lib/Elearn/Schema/ElearnDB/Result/Courses.pm blib/lib/Elearn/Schema/ElearnDB/Result/Courses.pm \
-	  lib/Elearn/Controller/userData.pm blib/lib/Elearn/Controller/userData.pm \
-	  test.pm $(INST_LIB)/test.pm \
-	  lib/Elearn/Model/ElearnDB.pm blib/lib/Elearn/Model/ElearnDB.pm \
-	  lib/Elearn/Controller/upload.pm blib/lib/Elearn/Controller/upload.pm \
-	  lib/Elearn/View/TT.pm blib/lib/Elearn/View/TT.pm \
+	  lib/Elearn/Controller/E_learning/courses.pm blib/lib/Elearn/Controller/E_learning/courses.pm \
+	  lib/Elearn/Controller/questions.pm.bak blib/lib/Elearn/Controller/questions.pm.bak \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/Categories.pm blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Categories.pm \
+	  lib/Elearn/Controller/search.pm.bak blib/lib/Elearn/Controller/search.pm.bak \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/LectureHasTags.pm blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/LectureHasTags.pm \
+	  lib/Elearn/Controller/watch.pm.bak blib/lib/Elearn/Controller/watch.pm.bak \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/CourseModule.pm.bak blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/CourseModule.pm.bak \
+	  lib/Elearn/Controller/documentCode.pm.bak blib/lib/Elearn/Controller/documentCode.pm.bak \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/UserLectureData.pm.bak blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/UserLectureData.pm.bak \
+	  lib/Elearn/Controller/courses.pm.bak blib/lib/Elearn/Controller/courses.pm.bak \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/Chapter.pm blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Chapter.pm \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/Categories.pm.bak blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Categories.pm.bak \
+	  lib/Elearn/Controller/E_learning/documentCode.pm blib/lib/Elearn/Controller/E_learning/documentCode.pm \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/Feedback.pm blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Feedback.pm \
 	  lib/Elearn.pm blib/lib/Elearn.pm \
-	  lib/Elearn/Schema/ElearnDB/Result/Tags.pm blib/lib/Elearn/Schema/ElearnDB/Result/Tags.pm \
-	  lib/Elearn/Schema/ElearnDB/Result/Categories.pm blib/lib/Elearn/Schema/ElearnDB/Result/Categories.pm \
-	  lib/Elearn/Controller/search.pm blib/lib/Elearn/Controller/search.pm \
-	  lib/Elearn/Schema/ElearnDB/Result/LectureHasTags.pm blib/lib/Elearn/Schema/ElearnDB/Result/LectureHasTags.pm \
-	  lib/Elearn/Schema/ElearnDB/Result/Feedback.pm blib/lib/Elearn/Schema/ElearnDB/Result/Feedback.pm \
-	  lib/Elearn/Controller/Root.pm blib/lib/Elearn/Controller/Root.pm \
-	  lib/Elearn/Schema/ElearnDB.pm blib/lib/Elearn/Schema/ElearnDB.pm \
-	  lib/Elearn/Schema/ElearnDB/Result/UserLectureData.pm blib/lib/Elearn/Schema/ElearnDB/Result/UserLectureData.pm \
-	  lib/Elearn/View/TT.pm.u1conflict blib/lib/Elearn/View/TT.pm.u1conflict \
-	  lib/Elearn/Schema/ElearnDB/Result/Lecture.pm blib/lib/Elearn/Schema/ElearnDB/Result/Lecture.pm \
+	  lib/youtube_download.pl.bak blib/lib/youtube_download.pl.bak \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/LectureQuestions.pm blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/LectureQuestions.pm \
+	  lib/Elearn/Controller/E_learning/createLecture.pm blib/lib/Elearn/Controller/E_learning/createLecture.pm \
+	  lib/Elearn/Controller/admin.pm.bak blib/lib/Elearn/Controller/admin.pm.bak \
+	  lib/Elearn/Controller/E_learning/userData.pm blib/lib/Elearn/Controller/E_learning/userData.pm \
+	  lib/Elearn/Controller/createLecture.pm.bak blib/lib/Elearn/Controller/createLecture.pm.bak \
+	  lib/Elearn/Schema/E_learning/ElearnDB.pm blib/lib/Elearn/Schema/E_learning/ElearnDB.pm \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/Courses.pm.bak blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Courses.pm.bak \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/Users.pm blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Users.pm \
+	  lib/Elearn.pm.bak blib/lib/Elearn.pm.bak \
+	  lib/Elearn/Schema/ElearnDB.pm.bak blib/lib/Elearn/Schema/ElearnDB.pm.bak \
+	  lib/Elearn/Controller/upload.pm.bak blib/lib/Elearn/Controller/upload.pm.bak 
+	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e 'pm_to_blib({@ARGV}, '\''$(INST_LIB)/auto'\'', q[$(PM_FILTER)], '\''$(PERM_DIR)'\'')' -- \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/UserQuestionAnswers.pm.bak blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/UserQuestionAnswers.pm.bak \
+	  lib/Elearn/Controller/userData.pm.bak blib/lib/Elearn/Controller/userData.pm.bak \
+	  lib/Elearn/Model/E_learning/ElearnDB.pm blib/lib/Elearn/Model/E_learning/ElearnDB.pm \
+	  lib/Elearn/Model/ElearnDB.pm.bak blib/lib/Elearn/Model/ElearnDB.pm.bak \
+	  lib/Elearn/Controller/E_learning/questions.pm blib/lib/Elearn/Controller/E_learning/questions.pm \
+	  lib/Elearn/Controller/E_learning/help.pm blib/lib/Elearn/Controller/E_learning/help.pm \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/Lecture.pm blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Lecture.pm \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/UserWatchedLecture.pm blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/UserWatchedLecture.pm \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/UserLectureData.pm blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/UserLectureData.pm \
+	  lib/Elearn/Controller/E_learning/admin.pm blib/lib/Elearn/Controller/E_learning/admin.pm \
+	  lib/Elearn/Controller/E_learning/search.pm blib/lib/Elearn/Controller/E_learning/search.pm \
+	  lib/Elearn/Controller/help.pm.bak blib/lib/Elearn/Controller/help.pm.bak \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/Tags.pm blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Tags.pm \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/UserWatchedLecture.pm.bak blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/UserWatchedLecture.pm.bak \
+	  lib/Elearn/View/E_LearningTT.pm.bak blib/lib/Elearn/View/E_LearningTT.pm.bak \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/UserQuestionAnswers.pm blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/UserQuestionAnswers.pm \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/CourseModule.pm blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/CourseModule.pm \
+	  lib/Elearn/Controller/E_learning/Root.pm blib/lib/Elearn/Controller/E_learning/Root.pm \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/Tags.pm.bak blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Tags.pm.bak \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/LectureQuestions.pm.bak blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/LectureQuestions.pm.bak \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/Lecture.pm.bak blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Lecture.pm.bak \
+	  lib/Elearn/View/E_learning/E_LearningTT.pm blib/lib/Elearn/View/E_learning/E_LearningTT.pm \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/LectureHasTags.pm.bak blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/LectureHasTags.pm.bak \
+	  lib/Elearn/Controller/Root.pm.bak blib/lib/Elearn/Controller/Root.pm.bak 
+	$(NOECHO) $(ABSPERLRUN) -MExtUtils::Install -e 'pm_to_blib({@ARGV}, '\''$(INST_LIB)/auto'\'', q[$(PM_FILTER)], '\''$(PERM_DIR)'\'')' -- \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/Feedback.pm.bak blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Feedback.pm.bak \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/Chapter.pm.bak blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Chapter.pm.bak \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/Users.pm.bak blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Users.pm.bak \
+	  lib/Elearn/Controller/E_learning/upload.pm blib/lib/Elearn/Controller/E_learning/upload.pm \
+	  lib/Elearn/Controller/E_learning/watch.pm blib/lib/Elearn/Controller/E_learning/watch.pm \
+	  lib/Elearn/Schema/E_learning/ElearnDB/Result/Courses.pm blib/lib/Elearn/Schema/E_learning/ElearnDB/Result/Courses.pm \
 	  lib/youtube_download.pl blib/lib/youtube_download.pl 
 	$(NOECHO) $(TOUCH) pm_to_blib
 
@@ -976,5 +1144,5 @@ checkdeps ::
 	$(PERL) Makefile.PL --checkdeps
 
 installdeps ::
-	$(PERL) Makefile.PL --config= --installdeps=List::Utils,0
+	$(NOECHO) $(NOOP)
 
