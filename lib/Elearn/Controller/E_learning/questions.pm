@@ -31,7 +31,7 @@ sub addQuestion :Local :Args(0){
 	my $alt1 = $c->request->params->{alt1};
 	my $alt2 = $c->request->params->{alt2};
 
-	$c->model('ElearnDB::lectureQuestions')->update_or_create({
+	$c->model('E_Learning::ElearnDB::lectureQuestions')->update_or_create({
 		lecture => $lecture,
 		answer => $answer,
 		question => $question,
@@ -45,11 +45,11 @@ sub addQuestion :Local :Args(0){
 sub getNewQuestion :Local :Args(2){
 	my ($self, $c, $id,$questionNumber) = @_;
 	my $answer = $c->request->params->{answer};
-	my $previousQuestion = $c->model('ElearnDB::lectureQuestions')->find({question_id => $questionNumber});
+	my $previousQuestion = $c->model('E_Learning::ElearnDB::lectureQuestions')->find({question_id => $questionNumber});
 	my $questionFeedback;
 	if($previousQuestion->answer() eq $answer){
 		$questionFeedback="Correct!";
-		$c->model('ElearnDB::userQuestionAnswers')->update_or_create({
+		$c->model('E_Learning::ElearnDB::userQuestionAnswers')->update_or_create({
 			user_answered => $c->forward('/getUserName'),
 			correct_answer => "1",
 			question => $questionNumber		
@@ -57,7 +57,7 @@ sub getNewQuestion :Local :Args(2){
 	}
 	else{
 		$questionFeedback="That is not the right answer";
-		$c->model('ElearnDB::userQuestionAnswers')->update_or_create({
+		$c->model('E_Learning::ElearnDB::userQuestionAnswers')->update_or_create({
 			user_answered => $c->forward('/getUserName'),
 			correct_answer => "0",
 			question => $questionNumber		
@@ -80,7 +80,7 @@ sub getNewQuestion :Local :Args(2){
 
 sub getLectureQuestions :Local :Args(1){
 	my ($self, $c, $id) = @_;
-	my @questions = $c->model('ElearnDB::lectureQuestions')->search({lecture => $id});
+	my @questions = $c->model('E_Learning::ElearnDB::lectureQuestions')->search({lecture => $id});
 	if(defined $questions[0]){
 		#Shuffle the result list and take the first question in the list and put it on the stash
 		@questions = shuffle(@questions);

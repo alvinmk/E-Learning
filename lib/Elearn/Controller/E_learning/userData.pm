@@ -23,9 +23,9 @@ Catalyst Controller.
 
 sub getUserData :Local Args(0){
 	my ( $self, $c ) = @_;
-	my $count = $c->model('ElearnDB::userLectureData')->search({times_watched => {">" ,0}})->count;
-	my $created = $c->model('ElearnDB::lecture')->search({creator => $c->stash->{user}} )->count;
-	my $answeredQuestions = $c->model('ElearnDB::userQuestionAnswers')->search({user_answered => $c->forward( '/getUserName')});
+	my $count = $c->model('E_Learning::ElearnDB::userLectureData')->search({times_watched => {">" ,0}})->count;
+	my $created = $c->model('E_Learning::ElearnDB::lecture')->search({creator => $c->stash->{user}} )->count;
+	my $answeredQuestions = $c->model('E_Learning::ElearnDB::userQuestionAnswers')->search({user_answered => $c->forward( '/getUserName')});
 	$c->stash(totalQuestions => $answeredQuestions->count());
 	$c->stash(correct => $answeredQuestions->get_column('correct_answer')->sum());
 	$c->stash(watched => $count);

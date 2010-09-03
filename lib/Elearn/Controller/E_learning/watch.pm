@@ -26,9 +26,9 @@ Catalyst Controller.
 
 sub watch : Chained('/')  Args(1){
 	my ($self, $c, $id) = @_;
-	my $lecture = $c->model('ElearnDB::lecture')->find($id);
-	my @tags = $c->model('ElearnDB::lectureHasTags')->search({lectureid => $id});
-	my @feedback = $c->model('ElearnDB::feedback')->search({lectureid => $id}, { -order_by => time});
+	my $lecture = $c->model('E_Learning::ElearnDB::lecture')->find($id);
+	my @tags = $c->model('E_Learning::ElearnDB::lectureHasTags')->search({lectureid => $id});
+	my @feedback = $c->model('E_Learning::ElearnDB::feedback')->search({lectureid => $id}, { -order_by => time});
 	my @tmp;
 	my @feedbackItems;
 	for my $row (@tags){
@@ -57,10 +57,10 @@ sub watch : Chained('/')  Args(1){
 
 sub watched :Local :Args(1){
 	my ($self, $c, $id) = @_;
-	my $lecture = $c->model('ElearnDB::lecture')->find($id);
+	my $lecture = $c->model('E_Learning::ElearnDB::lecture')->find($id);
 	$lecture->update({times_watched => $lecture->times_watched()+1});
 	#Make sure there is a record in the DB for the user and lecture
-	my $lecture_data = $c->model('ElearnDB::userLectureData')->update_or_create({
+	my $lecture_data = $c->model('E_Learning::ElearnDB::userLectureData')->update_or_create({
 		lecture => $id,
 		user => $c->forward('/getUserName'),
 	});
@@ -74,7 +74,7 @@ sub watched :Local :Args(1){
 =cut
 sub rateLecture :Local :Args(2){
 	my ($self, $c, $id, $rating) = @_;
-	$c->model('ElearnDB::userLectureData')->update_or_create({
+	$c->model('E_Learning::ElearnDB::userLectureData')->update_or_create({
 		lecture => $id,
 		user => $c->forward('/getUserName'),
 		rating => $rating,
@@ -88,7 +88,7 @@ sub rateLecture :Local :Args(2){
 
 sub rememberLecture :Local :Args(1){
 	my ($self, $c, $id) = @_;
-	$c->model('ElearnDB::userLectureData')->update_or_create({
+	$c->model('E_Learning::ElearnDB::userLectureData')->update_or_create({
 		lecture => $id,
 		user => $c->forward('/getUserName'),
 		favorite => 1,		
@@ -102,7 +102,7 @@ sub rememberLecture :Local :Args(1){
 
 sub addQuestion :Local :Args(5){
 	my ($self, $c, $id, $question, $answer, $alt1, $alt2) = @_;
-	$c->model('ElearnDB::lectureQuestions')->update_or_create({
+	$c->model('E_Learning::ElearnDB::lectureQuestions')->update_or_create({
 		lecture => $id,
 		user => $c->forward($c->uri_for('/getUserName')),
 		answer => $answer,

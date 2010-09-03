@@ -66,14 +66,14 @@ Edit a video, get data from database and fill it into the form
 
 sub edit :Chained('/') :Args(1){
 	my ($self, $c, $id) = @_;
-	my $lecture = $c->model('ElearnDB::lecture')->find($id);
-	my @tags = $c->model('ElearnDB::lectureHasTags')->search({lectureid => $id});
+	my $lecture = $c->model('E_Learning::ElearnDB::lecture')->find($id);
+	my @tags = $c->model('E_Learning::ElearnDB::lectureHasTags')->search({lectureid => $id});
 	my @tmp;
 	for my $field (@tags){
 		push(@tmp, $field->tag()->tag());
 	}
 	my @chapterData;
-	my @chapters = $c->model('ElearnDB::chapter')->search({lectureid => $id});
+	my @chapters = $c->model('E_Learning::ElearnDB::chapter')->search({lectureid => $id});
 	for my $field (@chapters){
 		$c->log->debug($field->start()."->".$field->stop().":".$field->chapter());
 		push(@chapterData, $field->start()."->".$field->stop().":".$field->chapter());
@@ -137,8 +137,8 @@ sub editDone :Local :Args(0){
 		CREATED => "$year-$mon-$mday", #Store it in the same format as mysql
 	};
 	#Remove chapters and tags for lecture
-	$c->model('ElearnDB::lectureHasTags')->search({ lectureid => $videoID})->delete_all();
-	$c->model('ElearnDB::chapter')->search({ lectureid => $videoID})->delete_all();
+	$c->model('E_Learning::ElearnDB::lectureHasTags')->search({ lectureid => $videoID})->delete_all();
+	$c->model('E_Learning::ElearnDB::chapter')->search({ lectureid => $videoID})->delete_all();
 	#Update database
 	$c->forward($c->uri_for('addToDB'), [$data]);
 	$c->response->redirect("/watch/$videoID");
@@ -288,7 +288,7 @@ sub addToDB :Private{
 	my $mysqlDate = $data->{CREATED};
 	$mysqlDate =~ s/:/-/g;
 	$c->log->debug("date: $mysqlDate" );
-	my $lecture = $c->model('ElearnDB::lecture')->update_or_create({
+	my $lecture = $c->model('E_Learning::ElearnDB::lecture')->update_or_create({
 		filename => $data->{ID},
 		creator => $data->{CREATOR},
 		name => $data->{TITLE},
@@ -300,10 +300,10 @@ sub addToDB :Private{
 	
 	#Att to the tags and lecture_has_tags table
 	for my $tag (@{$data->{TAGS}}){
-		my $tags = $c->model('ElearnDB::tags')->update_or_create({
+		my $tags = $c->model('E_Learning::ElearnDB::tags')->update_or_create({
 			tag => $tag,
 		});
-		my $lecture_has_tags = $c->model('ElearnDB::lectureHasTags')->update_or_create({
+		my $lecture_has_tags = $c->model('E_Learning::ElearnDB::lectureHasTags')->update_or_create({
 				tag => $tag,
 				lectureid => $data->{ID},
 		});
@@ -314,7 +314,7 @@ sub addToDB :Private{
 	for my $title (keys %{$chapters}){	
 		for my $time (@{$chapters->{$title}}){
 			my @startStop = split(":", $time);
-			my $chapter = $c->model('ElearnDB::chapter')->update_or_create({
+			my $chapter = $c->model('E_Learning::ElearnDB::chapter')->update_or_create({
 				chapter => $title,
 				lectureid => $data->{ID},
 				start => $startStop[0],
@@ -333,7 +333,7 @@ sub submitFeedback :Chained('/') :Args(0){
 	my ($self, $c) = @_;
 	my $feedback = $c->request->params->{feedback} || 'N/A';
 	my $lectureid = $c->request->params->{lectureid} || 'N/A';
-	my $feedbackItem = $c->model('ElearnDB::feedback')->update_or_create({
+	my $feedbackItem = $c->model('E_Learning::ElearnDB::feedback')->update_or_create({
 		lectureid => $lectureid,
 		user => $c->forward('/getUserName'),
 		feedback => $feedback,

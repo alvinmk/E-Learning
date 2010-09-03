@@ -25,7 +25,7 @@ sub adminView :Chained('/') :Args(1){
 
 sub recomendLecture : Local Args(1){
 	my ($self, $c, $id) = @_;
-	my $lecture = $c->model('ElearnDB::lecture')->find($id);
+	my $lecture = $c->model('E_Learning::ElearnDB::lecture')->find($id);
 	$lecture->update({recomended => 1});
 	$c->res->output("200 OK");
 }

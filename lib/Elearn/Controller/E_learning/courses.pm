@@ -26,7 +26,7 @@ sub listCourses :Chained('/') Args(1){
 	my @courses;
 	my @results;
 	if($argument eq "all"){
-		@courses = $c->model('ElearnDB::courses')->search({});
+		@courses = $c->model('E_Learning::ElearnDB::courses')->search({});
 		$c->log->debug("Matched 'all'");
 	}
 	for my $course (@courses){
@@ -39,10 +39,10 @@ sub listCourses :Chained('/') Args(1){
 
 sub getCourseLectures :Chained('/') Args(1){
 	my ($self, $c, $courseName) = @_;
-	my	@course = $c->model('ElearnDB::courseModule')->search({course_name => $courseName});
+	my	@course = $c->model('E_Learning::ElearnDB::courseModule')->search({course_name => $courseName});
 	my @results;
 	for my $id (@course){
-		my $lecture = $c->model('ElearnDB::lecture')->find({filename => $id->lecture()->filename()});
+		my $lecture = $c->model('E_Learning::ElearnDB::lecture')->find({filename => $id->lecture()->filename()});
 		$c->log->debug("found lecture ".$lecture->name());
 		push(@results, {name => $lecture->name(), id => $lecture->id(), description => $lecture->description()} );
 	}

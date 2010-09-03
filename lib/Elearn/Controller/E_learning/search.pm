@@ -25,7 +25,7 @@ Catalyst Controller.
 #Quick and dirty, list all videos
 sub list :Chained('/') :Args(){
 	my ($self, $c) = @_;
-	my @lecture = $c->model('ElearnDB::lecture')->search({});
+	my @lecture = $c->model('E_Learning::ElearnDB::lecture')->search({});
 	my @items;
 	my @ids;
 	for my $field (@lecture){
@@ -98,7 +98,7 @@ sub text :Chained('search') :Args(0){
 	#Otherwise only lectures with the coresponding category should be shown
 	else{
 		for my $id (@lectures){
-			my $lecture = $c->model('ElearnDB::lecture')->search({filename => $id, category => $category})->single();
+			my $lecture = $c->model('E_Learning::ElearnDB::lecture')->search({filename => $id, category => $category})->single();
 			if (defined $lecture){
 				push(@result, {name => $lecture->name(), id => $lecture->id(), creator => $lecture->creator(), description => $lecture->description()} );
 			}
@@ -115,7 +115,7 @@ sub text :Chained('search') :Args(0){
 
 sub creator :Chained('search') :Args(1){
 	my ($self, $c, $creator) = @_;
-	my @lectures = $c->model('ElearnDB::lecture')->search({creator => $creator});
+	my @lectures = $c->model('E_Learning::ElearnDB::lecture')->search({creator => $creator});
 	$c->forward('getInfoFromResultset', \@lectures);
 	$c->stash(header => "Author, $creator");
 }
@@ -125,7 +125,7 @@ sub creator :Chained('search') :Args(1){
 =cut
 sub getWatchedLectures :Chained('search') :Args(2){
 	my ($self, $c, $condition, $nr) = @_;
-	my @lectures = $c->model('ElearnDB::lecture')->search({times_watched => {$condition ,$nr}});
+	my @lectures = $c->model('E_Learning::ElearnDB::lecture')->search({times_watched => {$condition ,$nr}});
 	$c->forward('getInfoFromResultset', \@lectures);
 	$c->stash(header => "Watched lectures");		
 }
@@ -139,7 +139,7 @@ sub getLectureFromTags :Action(){
 	my @lectures;
 	my @hits;	
 	for my $tag (@tags){
-		push(@hits, $c->model('ElearnDB::lectureHasTags')->search({tag => $tag}));
+		push(@hits, $c->model('E_Learning::ElearnDB::lectureHasTags')->search({tag => $tag}));
 	}
 	for my $id (@hits){
 		push(@lectures, $id->lectureid()->filename);
@@ -156,7 +156,7 @@ sub getLectureFromDescription :Action(){
 	my @lectures;
 	my @hits;	
 	for my $tag (@tags){
-		push(@hits, $c->model('ElearnDB::lecture')->search({description => { -like => "%".$tag."%"}}));
+		push(@hits, $c->model('E_Learing::ElearnDB::lecture')->search({description => { -like => "%".$tag."%"}}));
 		$c->log->info("Looking for matching description for: $tag");
 	}
 	for my $id (@hits){
@@ -175,7 +175,7 @@ sub getLectureFromName :Action() {
 	$c->log->debug("Searching for name: ");
 	my @hits;	
 	for my $tag (@tags){
-		push(@hits, $c->model('ElearnDB::lecture')->search({name => { -like => "%".$tag."%"}}));
+		push(@hits, $c->model('E_Learning::ElearnDB::lecture')->search({name => { -like => "%".$tag."%"}}));
 		$c->log->debug("Looking for matching description for: $tag");
 	}
 	for my $id (@hits){
@@ -190,11 +190,11 @@ sub getLectureFromName :Action() {
 
 sub getRemembered :Chained('search'){
 	my ($self, $c) = @_;
-	my @found_lectures=  $c->model('ElearnDB::userLectureData')->search({ user => $c->forward('/getUserName'), favorite => 1});
+	my @found_lectures=  $c->model('E_Learning::ElearnDB::userLectureData')->search({ user => $c->forward('/getUserName'), favorite => 1});
 	my @lectures;
 	#Find all lectures in the lecture database
 	for my $hit (@found_lectures){
-		push(@lectures, $c->model('ElearnDB::lecture')->find({filename => $hit->lecture->filename()}));
+		push(@lectures, $c->model('E_Learning::ElearnDB::lecture')->find({filename => $hit->lecture->filename()}));
 	}
 	$c->forward('getInfoFromResultset', \@lectures);
 	$c->stash(header => "Remembered lectures");
@@ -206,7 +206,7 @@ sub getRemembered :Chained('search'){
 
 sub getRecomended :Chained('search'){
 	my ($self, $c) = @_;
-	my @lectures = $c->model('ElearnDB::lecture')->find({recomended => 1});	
+	my @lectures = $c->model('E_Learning::ElearnDB::lecture')->find({recomended => 1});	
 	$c->forward('getInfoFromResultset', \@lectures);
 	$c->stash(header => "Recomended lectures");
 }
@@ -237,7 +237,7 @@ sub getInfoFromID :Action{
 	my @lectures;
 	for my $id (@ids){
 		$c->log->debug("geInfoFromID: Looking for id: $id");
-		push(@lectures,$c->model('ElearnDB::lecture')->find({filename => $id}));
+		push(@lectures,$c->model('E_Learning::ElearnDB::lecture')->find({filename => $id}));
 	}
 	$c->forward('getInfoFromResultset', \@lectures);
 }

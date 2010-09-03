@@ -27,7 +27,7 @@ sub schema : Local {
 	my ( $self, $c ) = @_;
 	my $translator = SQL::Translator->new(
 		parser        => 'SQL::Translator::Parser::DBIx::Class',
-		data          => $c->model('ElearnDB')->schema,
+		data          => $c->model('E_Learning::ElearnDB')->schema,
 		producer      => 'Diagram',
 		producer_args => {
 			output_type => 'png',
