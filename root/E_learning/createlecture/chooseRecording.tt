@@ -1,3 +1,0 @@
-[% FOR file IN files %]
-	<p>[% file %]</p>
-[% END %]
