@@ -1,0 +1,6 @@
+[% FOR file IN files %]
+	<form method="POST" action="[% c.uri_for('chooseRecording') %]/[% file %]" enctype="multipart/form-data">
+			<label>[% file %]</label>
+			<input type="submit" name="submit" value="choose">
+	</form>
+[% END %]

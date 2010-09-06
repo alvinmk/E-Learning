@@ -36,7 +36,7 @@ sub startRecording : Local Args(0){
 	The user chooses a video and in the background it starts to be encoded
 =cut
 
-sub ListRecordings : Local Args(0){
+sub listRecordings : Local Args(0){
 	my ($self, $c) = @_;
 	opendir (DIR, $createdLecturePath);
 	$c->log->debug($createdLecturePath);
@@ -51,15 +51,16 @@ sub ListRecordings : Local Args(0){
 	shift @dir;
 	
 	$c->stash(files => \@dir);
-   
+   $c->stash(template => 'createlecture/listRecording.tt');
 
 } 
 
 =head2
 	When the user has made their choice the result is submitted to this functions which encodes it to flash
 =cut
-sub chooseRecordings : Local Args(1){
-	my ($self, $c) = @_;
+sub chooseRecording : Local Args(1){
+	my ($self, $c, $userfile) = @_;
+	$c->log->info($userfile);
 }
 
 
