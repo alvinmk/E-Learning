@@ -16,6 +16,9 @@
 			<a href=[% c.uri_for('/help') %]>
 				<section>Help</section>
 			</a>
+			<a href=[% c.uri_for('/e_learning/createlecture/listVideos') %]>
+				<section>Create lecture</section>
+			</a>
 			<p>
 				<a href="[% c.uri_for('/search/creator') %]/[% user %]">[% user %]</a><br>Watched: [% watched %] lectures<br>created [% created %] lectures<br>Answered [% totalQuestions %] questions and [% correct %] of them where correct<br>
 			</p>

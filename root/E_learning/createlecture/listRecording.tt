@@ -1,6 +1,22 @@
-[% FOR file IN files %]
-	<form method="POST" action="[% c.uri_for('chooseRecording') %]/[% file %]" enctype="multipart/form-data">
-			<label>[% file %]</label>
-			<input type="submit" name="submit" value="choose">
+<h3>Choose lecture</h3>
+<p>Either choose a lecture recorded with the webcam or specify a file on the file system</p>
+<section>
+	<form method="POST" action="[% c.uri_for('chooseVideoFile') %]" enctype="multipart/form-data">
+		<label>file:<input type="file" name="file"></label>
+		<input type="submit" name="submit" value="choose">
 	</form>
-[% END %]
+</section>
+<section<
+	<h3>Recorded lectures on this computer</h3>
+	[% FOR file IN files %]
+		<form method="POST" action="[% c.uri_for('chooseCheeseVideo') %]/[% file %]" enctype="multipart/form-data">
+				<a href="[% c.uri_for('playVideoInExternalPlayer') %]/[% file %]"><label>[% file %]</label></a>
+				<input type="submit" name="submit" value="choose">
+		</form>
+	[% END %]
+</section>
+<section>
+	<form method="POST" action="[% c.uri_for('startRecording') %]" enctype="multipart/form-data">
+		<label>Record new lecture<p><input type="submit" value="record" name="record">
+	</form>
+</section>

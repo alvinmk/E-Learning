@@ -2,8 +2,9 @@ package Elearn::Controller::E_learning::createLecture;
 use Moose;
 use File::HomeDir qw(home);
 use namespace::autoclean;
+use Gtk2::Notify -init, "YFRHW";
 
-my $createdLecturePath = File::HomeDir->my_home."/Video/Webcam";
+my $createdLecturePath = File::HomeDir->my_home."/Video/Webcam"; #The directory where gnome cheese store recoreded material
 
 BEGIN {extends 'Catalyst::Controller'; }
 
@@ -24,6 +25,9 @@ Catalyst Controller.
 =cut
 sub startRecording : Local Args(0){
 	my ($self, $c) = @_;
+	system("cheese"); #Blocking, no redirect until the program closes, if this is run as a server and not a local application things will get strange
+	#When the user closes the program detach and list the new recording
+	$c->detach('listVideos'); 
 }
 
 
@@ -36,31 +40,65 @@ sub startRecording : Local Args(0){
 	The user chooses a video and in the background it starts to be encoded
 =cut
 
-sub listRecordings : Local Args(0){
+sub listVideos : Local Args(0){
 	my ($self, $c) = @_;
 	opendir (DIR, $createdLecturePath);
 	$c->log->debug($createdLecturePath);
    my @dir = readdir(DIR);
-
-
-	$c->log->debug("$dir[1]");
 	closedir(DIR);
    @dir = sort { -M "$createdLecturePath/$a" <=> -M "$createdLecturePath/$b" } (@dir); #perl magic, sorts by modification time
-	#In unix everything is a file, so the current directory and the top level are stored as files. Or so it seems
-	shift @dir;
-	shift @dir;
-	
-	$c->stash(files => \@dir);
+	#Check that all files are video files and store them in a new list
+	my @results;
+	for my $file (@dir){
+		if( $file =~ m/(.flv)|(.avi)|(.mkv)|(.ogv)|(.ogg)|(mpg)/i){ #check if the file contains a file ending and ignore case
+			push(@results, $file);
+		}
+	}
+	$c->stash(files => \@results);
    $c->stash(template => 'createlecture/listRecording.tt');
+}
 
-} 
+=head2
+	launches a video in an external video player
+=cut
+
+sub playVideoInExternalPlayer : Local Args(1){
+	my ($self, $c, $userfile) = @_;
+	system("vlc '$createdLecturePath/$userfile'"); #Launches vlc through the command line
+	$c->detach('listVideos');
+}
 
 =head2
 	When the user has made their choice the result is submitted to this functions which encodes it to flash
 =cut
-sub chooseRecording : Local Args(1){
+sub chooseCheeseVideo : Local Args(1){
 	my ($self, $c, $userfile) = @_;
 	$c->log->info($userfile);
+
+	#Encode to flash in separate process
+	my $child = fork;
+	#Child process	
+	if($child == 0){
+		$SIG{INT}='DEFAULT';	
+		my $args =("ffmpeg -i '$createdLecturePath/$userfile' -ar 22050 -f flv -s 640x480 -y root/LectureData/shared/$userfile.flv");
+		exec($args);
+		my $notification = Gtk2::Notify->new("Encoding finished", "The encoding of your video: $userfile is now finsihed. You can now watch the lecture");
+		exit(0);
+	}
+	#Parent process
+	else{
+	
+	}
+	#add to database
+
+	#forward to edit view
+}
+
+sub chooseVideoFile : Local Args(0){
+	my ($self, $c) = @_;
+	my $userfile = $c->request->params->{file};
+	
+	#$c->detach('chooseRecording', $userfile);
 }
 
 
