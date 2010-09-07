@@ -16,7 +16,7 @@
 	[% END %]
 </section>
 <section>
-	<form method="POST" action="[% c.uri_for('startRecording') %]" enctype="multipart/form-data">
+	<form method="POST" action="[% c.uri_for('startCheese') %]" enctype="multipart/form-data">
 		<label>Record new lecture<p><input type="submit" value="record" name="record">
 	</form>
 </section>

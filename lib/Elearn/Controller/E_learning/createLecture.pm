@@ -23,7 +23,7 @@ Catalyst Controller.
 =head2
 	#Launches gnome cheese and then let's the user choose to continue
 =cut
-sub startRecording : Local Args(0){
+sub startCheese : Local Args(0){
 	my ($self, $c) = @_;
 	system("cheese"); #Blocking, no redirect until the program closes, if this is run as a server and not a local application things will get strange
 	#When the user closes the program detach and list the new recording
@@ -87,7 +87,7 @@ sub chooseCheeseVideo : Local Args(1){
 	}
 	#Parent process
 	else{
-	
+		#do nothing
 	}
 	#add to database
 
