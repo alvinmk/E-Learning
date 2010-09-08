@@ -71,20 +71,24 @@ sub playVideoInExternalPlayer : Local Args(1){
 =head2
 	When the user has made their choice the result is submitted to this functions which encodes it to flash
 =cut
-sub chooseCheeseVideo : Local Args(1){
-	my ($self, $c, $userfile) = @_;
+sub chooseCheeseVideo : Local Args(1 || 2){ #This is awesome, dynamic input arguments!
+	my ($self, $c, $userfile, $path) = @_;
 	$c->log->info($userfile);
-
+	#If no path is defined use the default path
+	if(!defined $path){
+		$path=$createdLecturePath;
+	}
+	$c->log->debug("The path for the video file is $path");
 	#Encode to flash in separate process
-
 	#Child process	
 	my $filename = $userfile;
 	$filename =~ s/(\..+)$//;
+	#Chech that it's not already a flv file
 	if($1 ne ".flv"){
 		my $child = fork;
 		if($child == 0){
 			$SIG{INT}='DEFAULT';	
-			my $args =("ffmpeg -i '$createdLecturePath/$userfile' -ar 22050 -f flv -s 640x480 -y root/LectureData/shared/$filename.flv");
+			my $args =("ffmpeg -i '$path/$userfile' -ar 22050 -f flv -s 640x480 -y root/LectureData/shared/$filename.flv");
 			system($args);
 			my $notification = Gtk2::Notify->new("Encoding finished", "The encoding of your video: $userfile is now finsihed. You can now watch the lecture");
 			exit(0);
@@ -104,11 +108,16 @@ sub chooseCheeseVideo : Local Args(1){
 	#forward to edit view
 	$c->detach("Elearn::Controller::E_learning::upload", "edit", [$filename]);
 }
+=head2
+	Let the user specify a file in another location, copy it to the temp directory and then let the chooseCheeseVideo function encode them and add them to the database.
+=cut
 
 sub chooseVideoFile : Local Args(0){
 	my ($self, $c) = @_;
 	my $userfile = $c->request->params->{file};
-	#$c->detach('chooseRecording', $userfile);
+	my $upload = $c->request->upload('file');
+	$upload->copy_to("root/LectureData/temp/$userfile");
+	$c->detach("chooseCheeseVideo", [$userfile, "/root/LectureData/temp/"]);
 }
 
 
