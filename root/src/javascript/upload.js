@@ -35,7 +35,7 @@ function stopTimestamp(){
 function setVideo(path, video, extension){
 	videoID = video;
 	var params = { 'allowScriptAccess': 'always'};
-	var flashvars = {'file': path+video+extension, 'allowfullscreen': 'true'};
+	var flashvars = {'file': path+video+"."+extension, 'allowfullscreen': 'true'};
 	// The element id of the Flash embed
 	var atts = { 'id': "player", 'name': 'player'};
 	// All of the magic handled by SWFObject (http://code.google.com/p/swfobject/)
@@ -94,7 +94,7 @@ function startUpload(){
 
 function stopUpload(video)
 {
-		setVideo("/LectureData/temp/",video, ".flv");
+		setVideo("/LectureData/temp/",video, "flv");
 		document.videoInfo.link.value=video;
 		document.getElementById("uploadMessage").innerHTML="";
 }

@@ -6,7 +6,7 @@
 <link rel="stylesheet" href=[% c.uri_for('E_learning/static/css/watch.css') %] type="text/css" media="screen" />
 
 <div id="mainContent">
-<form method="POST" action="[% c.uri_for('editDone') %]" enctype="multipart/form-data" name="videoInfo">
+<form method="POST" action="[% c.uri_for('/e_learning/upload/editDone') %]" enctype="multipart/form-data" name="videoInfo">
 	<section id="lecture">
 		<input type="text" name="title" size="25" value="[% title %]">
 		<div id="videoDiv" name="video"></div>

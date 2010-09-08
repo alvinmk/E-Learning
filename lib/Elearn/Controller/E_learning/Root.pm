@@ -59,7 +59,7 @@ Attempt to render a view, if needed.
 sub end : ActionClass('RenderView'){ 
 	my ( $self, $c ) = @_;
 	$c->stash(user => $c->forward('getUserName'));
-	$c->forward("/e_learning/userdata/getUserData");
+	$c->forward("Elearn::Controller::E_learning::userData", "getUserData");
 }
 
 

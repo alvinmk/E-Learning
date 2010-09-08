@@ -76,28 +76,38 @@ sub chooseCheeseVideo : Local Args(1){
 	$c->log->info($userfile);
 
 	#Encode to flash in separate process
-	my $child = fork;
+
 	#Child process	
-	if($child == 0){
-		$SIG{INT}='DEFAULT';	
-		my $args =("ffmpeg -i '$createdLecturePath/$userfile' -ar 22050 -f flv -s 640x480 -y root/LectureData/shared/$userfile.flv");
-		exec($args);
-		my $notification = Gtk2::Notify->new("Encoding finished", "The encoding of your video: $userfile is now finsihed. You can now watch the lecture");
-		exit(0);
-	}
-	#Parent process
-	else{
-		#do nothing
+	my $filename = $userfile;
+	$filename =~ s/(\..+)$//;
+	if($1 ne ".flv"){
+		my $child = fork;
+		if($child == 0){
+			$SIG{INT}='DEFAULT';	
+			my $args =("ffmpeg -i '$createdLecturePath/$userfile' -ar 22050 -f flv -s 640x480 -y root/LectureData/shared/$filename.flv");
+			system($args);
+			my $notification = Gtk2::Notify->new("Encoding finished", "The encoding of your video: $userfile is now finsihed. You can now watch the lecture");
+			exit(0);
+		}
+		#Parent process
+		else{
+			#do nothing
+		}
 	}
 	#add to database
-
+	my $lecture = $c->model('E_Learning::ElearnDB::lecture')->update_or_create({
+		filename => $filename,
+		filetype => "flv",
+		creator => $c->forward('Elearn::Controller::E_learning::Root', 'getUserName'),
+		category => "general" #must be set for foreign key
+	});
 	#forward to edit view
+	$c->detach("Elearn::Controller::E_learning::upload", "edit", [$filename]);
 }
 
 sub chooseVideoFile : Local Args(0){
 	my ($self, $c) = @_;
 	my $userfile = $c->request->params->{file};
-	
 	#$c->detach('chooseRecording', $userfile);
 }
 

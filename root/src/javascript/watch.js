@@ -54,7 +54,7 @@ function answer(){
 	newQuestion(answer);
 
 }
-
+//Sends the answer to the controller and asks for a new questions
 function newQuestion(answer){
 	$.ajax({
 		type: "POST",
@@ -65,7 +65,8 @@ function newQuestion(answer){
 	});	
 }
 
-
+//Takes a question from the controller and renders it in the question div
+//This function is called as a response from the newQuestion function
 function renderQuestion(result){
 	var test = eval("("+result+")");
 	document.getElementById('questionAsked').innerHTML=test.question;

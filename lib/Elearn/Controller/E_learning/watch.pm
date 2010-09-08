@@ -42,7 +42,7 @@ sub watch : Chained('/')  Args(1){
 	$c->stash(title => $lecture->name());
 	$c->stash(lecturePath => "/LectureData/shared/");
 	$c->stash(lecture => $lecture->filename());
-	$c->stash(fileExtension => ".flv");
+	$c->stash(fileExtension => $lecture->filetype() || "flv");
 	$c->stash(creator => $lecture->creator() );
 	$c->stash(feedback => \@feedbackItems);
 	$c->stash(tags => [@tmp]);

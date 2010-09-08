@@ -29,6 +29,7 @@
 	<footer>
 		<div>
 			<p>ICT4MPOWER, UGANDA</p>
+			<a href="http://127.0.1.1:3000/e_learning/documentcode/schema">Developer schema</a>
 		</div>
 	</footer>
 </body>

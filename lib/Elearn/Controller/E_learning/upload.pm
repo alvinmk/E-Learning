@@ -129,7 +129,7 @@ sub editDone :Local :Args(0){
 		ID => $videoID,
 		TITLE => $title,
 		DESCRIPTION => $description,
-		CREATOR => $c->forward($c->uri_for('/getUserName')),
+		CREATOR => $c->forward('/getUserName'),
 		TAGS => [@tags],
 		CHAPTERS => $chapters,
 		CATEGORY => $category,
@@ -140,7 +140,7 @@ sub editDone :Local :Args(0){
 	$c->model('E_Learning::ElearnDB::lectureHasTags')->search({ lectureid => $videoID})->delete_all();
 	$c->model('E_Learning::ElearnDB::chapter')->search({ lectureid => $videoID})->delete_all();
 	#Update database
-	$c->forward($c->uri_for('addToDB'), [$data]);
+	$c->forward("Elearn::Controller::E_learning::upload", 'addToDB', [$data]);
 	$c->response->redirect("/watch/$videoID");
 }
 
