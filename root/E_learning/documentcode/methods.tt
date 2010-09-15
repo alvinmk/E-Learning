@@ -1,0 +1,35 @@
+<section>
+	<h2>[% class %]</h2>
+	[% FOREACH method = methodNames %]
+		<section>
+			<h3>[% methodContent.$method.path %][% methodContent.$method.name %]([% methodContent.$method.nrArgs %])</h3>
+			<section>
+				<section>
+				<em>input</em><br>
+				[% FOREACH line = methodContent.$method.input %]
+							<p>*[% line %]</p>	
+				[% END %]
+				</section>
+				<section>
+				<em>model</em><br>
+				[% FOREACH line = methodContent.$method.model %]
+							<p>*[% line %]</p>	
+				[% END %]
+				</section>
+				<section>
+				<em>calls</em><br>
+				[% FOREACH line = methodContent.$method.calls %]
+							<p>*[% line %]</p>	
+				[% END %]
+				</section>
+				<section>
+				<em>Stash</em><br>
+				[% FOREACH line = methodContent.$method.stash %]
+							<p>*[% line %]</p>	
+				[% END %]
+				</section>
+			</section>
+		</section>	
+		<br>
+	[% END %]
+</section>

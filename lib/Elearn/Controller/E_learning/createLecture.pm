@@ -71,7 +71,7 @@ sub playVideoInExternalPlayer : Local Args(1){
 =head2
 	When the user has made their choice the result is submitted to this functions which encodes it to flash
 =cut
-sub chooseCheeseVideo : Local Args(1 || 2){ #This is awesome, dynamic input arguments!
+sub chooseVideo : Local Args(){
 	my ($self, $c, $userfile, $path) = @_;
 	$c->log->info($userfile);
 	#If no path is defined use the default path
@@ -115,9 +115,23 @@ sub chooseCheeseVideo : Local Args(1 || 2){ #This is awesome, dynamic input argu
 sub chooseVideoFile : Local Args(0){
 	my ($self, $c) = @_;
 	my $userfile = $c->request->params->{file};
-	my $upload = $c->request->upload('file');
-	$upload->copy_to("root/LectureData/temp/$userfile");
-	$c->detach("chooseCheeseVideo", [$userfile, "/root/LectureData/temp/"]);
+	if( $userfile =~ m/(.flv)|(.avi)|(.mkv)|(.ogv)|(.ogg)|(mpg)/i){
+		my $upload = $c->request->upload('file');
+		$upload->copy_to("root/LectureData/temp/$userfile");
+		$c->detach("chooseVideo", [$userfile, "/root/LectureData/temp/"]);
+	}
+	#If it's another filetype
+	else {
+
+	}
+}
+
+=head2
+
+=cut
+
+sub chooseOtherFile : Local Args(1){
+	my ($self, $c, $userfile) = @_;
 }
 
 

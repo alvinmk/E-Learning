@@ -23,7 +23,7 @@ Catalyst Controller.
 =cut
 
 #Quick and dirty, list all videos
-sub list :Chained('/') :Args(){
+sub list :Chained('/') :Args(0){
 	my ($self, $c) = @_;
 	my @lecture = $c->model('E_Learning::ElearnDB::lecture')->search({});
 	my @items;

@@ -9,7 +9,7 @@
 <section<
 	<h3>Recorded lectures on this computer</h3>
 	[% FOR file IN files %]
-		<form method="POST" action="[% c.uri_for('chooseCheeseVideo') %]/[% file %]" enctype="multipart/form-data">
+		<form method="POST" action="[% c.uri_for('chooseVideo') %]/[% file %]" enctype="multipart/form-data">
 				<a href="[% c.uri_for('playVideoInExternalPlayer') %]/[% file %]"><label>[% file %]</label></a>
 				<input type="submit" name="submit" value="choose">
 		</form>

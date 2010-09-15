@@ -24,7 +24,7 @@ Catalyst Controller.
 	Serves the lecture and all information
 =cut
 
-sub watch : Chained('/')  Args(1){
+sub watch :Chained('/') Args(1){
 	my ($self, $c, $id) = @_;
 	my $lecture = $c->model('E_Learning::ElearnDB::lecture')->find($id);
 	my @tags = $c->model('E_Learning::ElearnDB::lectureHasTags')->search({lectureid => $id});
@@ -55,7 +55,7 @@ sub watch : Chained('/')  Args(1){
 	A lecture has been watcehd an this is recorded in the database
 =cut
 
-sub watched :Local :Args(1){
+sub watched :Local Args(1){
 	my ($self, $c, $id) = @_;
 	my $lecture = $c->model('E_Learning::ElearnDB::lecture')->find($id);
 	$lecture->update({times_watched => $lecture->times_watched()+1});
