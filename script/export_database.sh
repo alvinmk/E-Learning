@@ -1,1 +1,1 @@
-mysqldump -u elearn E_Learning > E_LearningDB
+mysqldump --no-data -u elearn E_Learning > E_learningDB.mysql 

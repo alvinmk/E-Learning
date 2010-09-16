@@ -1,0 +1,252 @@
+-- MySQL dump 10.13  Distrib 5.1.41, for debian-linux-gnu (i486)
+--
+-- Host: localhost    Database: E_Learning
+-- ------------------------------------------------------
+-- Server version	5.1.41-3ubuntu12.6
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `categories`
+--
+
+DROP TABLE IF EXISTS `categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `categories` (
+  `category` varchar(50) NOT NULL,
+  PRIMARY KEY (`category`),
+  KEY `category` (`category`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `chapter`
+--
+
+DROP TABLE IF EXISTS `chapter`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `chapter` (
+  `chapter` varchar(50) NOT NULL,
+  `lectureID` varchar(20) NOT NULL,
+  `start` float NOT NULL,
+  `stop` float NOT NULL,
+  PRIMARY KEY (`chapter`,`lectureID`,`start`,`stop`),
+  KEY `fk_lecture` (`lectureID`),
+  CONSTRAINT `fk_lecture` FOREIGN KEY (`lectureID`) REFERENCES `lecture` (`filename`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `course_module`
+--
+
+DROP TABLE IF EXISTS `course_module`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `course_module` (
+  `course_name` varchar(50) NOT NULL,
+  `lecture` varchar(50) NOT NULL,
+  `lecture_number` int(11) NOT NULL,
+  PRIMARY KEY (`course_name`,`lecture`),
+  KEY `course_lecture_fk` (`lecture`),
+  CONSTRAINT `course_lecture_fk` FOREIGN KEY (`lecture`) REFERENCES `lecture` (`filename`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `course_name_fk` FOREIGN KEY (`course_name`) REFERENCES `courses` (`course_name`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `courses`
+--
+
+DROP TABLE IF EXISTS `courses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `courses` (
+  `course_name` varchar(100) NOT NULL,
+  `description` text NOT NULL,
+  PRIMARY KEY (`course_name`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `feedback`
+--
+
+DROP TABLE IF EXISTS `feedback`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `feedback` (
+  `lectureID` varchar(50) NOT NULL,
+  `user` varchar(100) NOT NULL,
+  `feedback` text NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `response_to` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fklecture` (`lectureID`),
+  CONSTRAINT `fklecture` FOREIGN KEY (`lectureID`) REFERENCES `lecture` (`filename`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `lecture`
+--
+
+DROP TABLE IF EXISTS `lecture`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lecture` (
+  `creator` varchar(100) DEFAULT NULL,
+  `times_watched` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(80) NOT NULL,
+  `description` text NOT NULL,
+  `category` varchar(20) NOT NULL,
+  `public` tinyint(1) NOT NULL,
+  `created` date NOT NULL,
+  `filename` varchar(20) NOT NULL,
+  `recomended` tinyint(1) NOT NULL DEFAULT '0',
+  `filetype` varchar(4) NOT NULL,
+  `language` varchar(20) NOT NULL,
+  PRIMARY KEY (`filename`) USING BTREE,
+  KEY `category` (`category`),
+  CONSTRAINT `category` FOREIGN KEY (`category`) REFERENCES `categories` (`category`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `lecture_has_tags`
+--
+
+DROP TABLE IF EXISTS `lecture_has_tags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lecture_has_tags` (
+  `tag` varchar(50) NOT NULL,
+  `lectureID` varchar(20) NOT NULL,
+  PRIMARY KEY (`tag`,`lectureID`) USING BTREE,
+  KEY `tag_lecture` (`lectureID`),
+  CONSTRAINT `tag` FOREIGN KEY (`tag`) REFERENCES `tags` (`tag`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `tag_lecture` FOREIGN KEY (`lectureID`) REFERENCES `lecture` (`filename`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `lecture_questions`
+--
+
+DROP TABLE IF EXISTS `lecture_questions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lecture_questions` (
+  `lecture` varchar(20) NOT NULL,
+  `question` varchar(200) NOT NULL,
+  `answer` text NOT NULL,
+  `alternative1` text NOT NULL,
+  `alternative2` text NOT NULL,
+  `user` varchar(100) NOT NULL,
+  `question_id` int(32) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`question_id`) USING BTREE,
+  KEY `lecture_fk` (`lecture`),
+  CONSTRAINT `lecture_fk` FOREIGN KEY (`lecture`) REFERENCES `lecture` (`filename`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tags`
+--
+
+DROP TABLE IF EXISTS `tags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tags` (
+  `tag` varchar(50) NOT NULL,
+  PRIMARY KEY (`tag`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `user_lecture_data`
+--
+
+DROP TABLE IF EXISTS `user_lecture_data`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_lecture_data` (
+  `user` varchar(100) NOT NULL,
+  `rating` tinyint(1) DEFAULT NULL,
+  `lecture` varchar(20) NOT NULL,
+  `times_watched` int(11) DEFAULT '0',
+  `favorite` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`user`,`lecture`) USING BTREE,
+  KEY `new_fk_constraint` (`lecture`),
+  CONSTRAINT `new_fk_constraint` FOREIGN KEY (`lecture`) REFERENCES `lecture` (`filename`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `user_question_answers`
+--
+
+DROP TABLE IF EXISTS `user_question_answers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_question_answers` (
+  `question` int(32) NOT NULL,
+  `correct_answer` tinyint(1) NOT NULL,
+  `user_answered` varchar(100) NOT NULL,
+  PRIMARY KEY (`question`,`user_answered`),
+  CONSTRAINT `questionid` FOREIGN KEY (`question`) REFERENCES `lecture_questions` (`question_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `user_watched_lecture`
+--
+
+DROP TABLE IF EXISTS `user_watched_lecture`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_watched_lecture` (
+  `user` varchar(100) NOT NULL,
+  `lecture` varchar(20) NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user`,`time`),
+  KEY `watched_lecture_flk` (`lecture`),
+  CONSTRAINT `watched_lecture_flk` FOREIGN KEY (`lecture`) REFERENCES `lecture` (`filename`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `name` varchar(100) NOT NULL,
+  PRIMARY KEY (`name`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2010-09-16  9:38:39
