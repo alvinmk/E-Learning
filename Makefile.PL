@@ -18,6 +18,7 @@ requires 'File::Basename';
 requires 'File::HomeDir';
 requires 'List::Util';
 requires 'Gtk2::Notify';
+requires 'SQL::Translator';
 requires 'namespace::autoclean';
 requires 'Config::General'; # This should reflect the config file format you've chosen
                  # See Catalyst::Plugin::ConfigLoader for supported formats
