@@ -13,7 +13,7 @@ if [ "$answer" = "y" ]
 		echo "Setting up database for Elearning, needs your mysql root password"
 		mysql -u root -p -e "CREATE DATABASE E_Learning;"
 		mysql -u root -p -e "CREATE USER elearn@localhost;"
-		mysql -u root -p -e "GRANT ALL ON E_Learning.* TO elearn@localhost;"
+		mysql -u root -p -e "GRANT ALL ON E_Learning TO elearn@localhost;"
 		#Create the tables
 		mysql -u elearn E_Learning < E_learningDB.mysql
 		#Update the perl scripts connecting the database

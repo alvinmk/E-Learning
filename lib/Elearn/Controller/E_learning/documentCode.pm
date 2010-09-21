@@ -2,8 +2,6 @@ package Elearn::Controller::E_learning::documentCode;
 use Moose;
 use namespace::autoclean;
 use SQL::Translator;
-use Template::AsGraph;
-#use CatalystX::Dispatcher::AsGraph;
 
 BEGIN {extends 'Catalyst::Controller'; }
 
@@ -98,22 +96,6 @@ sub methods : Local :Args(1){
 	$c->stash(template => "documentcode/methods.tt");
 }
 
-#Not really usefull
-sub actionGraph : Local {
-	my ( $self, $c ) = @_;
-	my $graph = CatalystX::Dispatcher::AsGraph->new(
-   	  appname => 'Elearn',
-	     output  => 'myactions.png',
-	);
-	$graph->run;
-	if ( open( my $png, '|-', 'dot -Tpng -o ' . $graph->output ) ) {
-	   print $png $graph->graph->as_graphviz;
-
-		$c->res->content_type('text/html');
-		$c->res->body( "done");
-	   close $png;
-	}
-}
 =head1 AUTHOR
 
 Alvin,,,
