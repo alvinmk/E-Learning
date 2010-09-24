@@ -46,6 +46,8 @@ sub list :Chained('/') :Args(0){
 =cut
 sub search :Chained('/') CaptureArgs(0){
 	my ($self, $c) = @_;	
+	my @categories = $c->model('E_Learning::ElearnDB::categories')->search({})->get_column('category')->all;
+	$c->stash(categories => \@categories);
 	$c->stash(template =>'search/list.tt');	
 }
 
