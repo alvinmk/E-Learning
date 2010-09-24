@@ -4,7 +4,7 @@
 	<link rel="stylesheet" href=[% c.uri_for('/E_learning/static/css/wraper.css') %] type="text/css" media="screen" />
 </head>
 <body>
-	<div id="content">
+	<section id="content">
 		<aside id="menu">
 			<h3>E-learning Portal</h3>
 			<a href=[% c.uri_for('/list') %]>
@@ -24,7 +24,7 @@
 			</p>
 		</aside>
 		[% content %]
-	</div>
+	</section>
 	
 	<footer>
 		<div>
