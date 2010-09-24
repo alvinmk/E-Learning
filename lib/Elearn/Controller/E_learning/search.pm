@@ -26,6 +26,9 @@ Catalyst Controller.
 sub list :Chained('/') :Args(0){
 	my ($self, $c) = @_;
 	my @lecture = $c->model('E_Learning::ElearnDB::lecture')->search({});
+	#Put all the categories on the stash
+	my @categories = $c->model('E_Learning::ElearnDB::categories')->search({})->get_column('category')->all;
+	$c->stash(categories => \@categories);
 	my @items;
 	my @ids;
 	for my $field (@lecture){

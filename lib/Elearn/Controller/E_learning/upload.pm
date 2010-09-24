@@ -78,16 +78,18 @@ sub edit :Chained('/') :Args(1){
 		$c->log->debug($field->start()."->".$field->stop().":".$field->chapter());
 		push(@chapterData, $field->start()."->".$field->stop().":".$field->chapter());
 	}
+	my @categories = $c->model('E_Learning::ElearnDB::categories')->search({})->get_column('category')->all;
 	$c->stash(description => $lecture->description());
 	$c->stash(title => $lecture->name());
 	$c->stash(lecturePath => "/LectureData/shared/");
 	$c->stash(lecture => $lecture->filename());
-	$c->stash(fileExtension => ".flv");
+	$c->stash(fileExtension => $lecture->filetype());
 	$c->stash(creator => $lecture->creator() );
 	$c->stash(tags => [@tmp]);
 	$c->stash(chapters => [@chapterData]);
 	$c->stash(id => $lecture->filename());
 	$c->stash(template => 'upload/edit.tt');
+	$c->stash(categories => \@categories);
 }
 
 =head2 editDone

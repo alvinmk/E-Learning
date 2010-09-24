@@ -3,6 +3,7 @@ use Moose;
 use File::HomeDir qw(home);
 use namespace::autoclean;
 use Gtk2::Notify -init, "YFRHW";
+use File::Copy;
 
 my $createdLecturePath = File::HomeDir->my_home."/Video/Webcam"; #The directory where gnome cheese store recoreded material
 
@@ -97,6 +98,10 @@ sub chooseVideo : Local Args(){
 		else{
 			#do nothing
 		}
+	}
+	else{
+		$c->log->debug("Copying $path/$userfile to root/LectureData/shared/$filename.flv");
+		copy("$path/$userfile","root/LectureData/shared/$filename.flv");
 	}
 	#add to database
 	my $lecture = $c->model('E_Learning::ElearnDB::lecture')->update_or_create({

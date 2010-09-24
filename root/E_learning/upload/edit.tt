@@ -30,10 +30,9 @@
 	<section>
 		<label>Category: </label>
 		<select name="category">
-			<option value="preventive">preventive</option>
-			<option value="diagnosis">diagnosis</option>
-			<option value="treatment">treatment</option>
-			<option value="general">general</option>
+			[% FOREACH option = categories %]
+				<option value="[% option %]">[% option %]</option>			
+			[% END %]
 		</select>
 		<br>
 		<label>Availability: </label>
