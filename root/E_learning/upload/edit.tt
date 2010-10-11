@@ -1,12 +1,12 @@
 <script language="javascript" type="text/javascript" src="/src/javascript/swfobject.js"></script>
-<script language="javascript" type="text/javascript" src="/src/javascript/upload.js"></script>
+<script language="javascript" type="text/javascript" src="/src/javascript/player.js"></script>
 <script language="javascrip" type="text/javascript">
 	setVideo("[% lecturePath %]", "[% lecture %]","[% fileExtension %]");
 </script>
 <link rel="stylesheet" href=[% c.uri_for('E_learning/static/css/watch.css') %] type="text/css" media="screen" />
 
 <div id="mainContent">
-<form method="POST" action="[% c.uri_for('/e_learning/upload/editDone') %]" enctype="multipart/form-data" name="videoInfo">
+<form method="POST" action="[% c.uri_for('/e_learning/edit/editDone') %]" enctype="multipart/form-data" name="videoInfo">
 	<section id="lecture">
 		<input type="text" name="title" size="25" value="[% title %]">
 		<div id="videoDiv" name="video"></div>

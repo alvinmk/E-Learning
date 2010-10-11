@@ -111,7 +111,7 @@ sub chooseVideo : Local Args(){
 		category => "general" #must be set for foreign key
 	});
 	#forward to edit view
-	$c->detach("Elearn::Controller::E_learning::upload", "edit", [$filename]);
+	$c->detach("Elearn::Controller::E_learning::edit", "edit", [$filename]);
 }
 =head2
 	Let the user specify a file in another location, copy it to the temp directory and then let the chooseCheeseVideo function encode them and add them to the database.

@@ -112,6 +112,21 @@ sub addQuestion :Local :Args(5){
 	});
 }
 
+=head2 submitFeedback
+
+=cut
+sub submitFeedback :Chained('/') :Args(0){
+	my ($self, $c) = @_;
+	my $feedback = $c->request->params->{feedback} || 'N/A';
+	my $lectureid = $c->request->params->{lectureid} || 'N/A';
+	my $feedbackItem = $c->model('E_Learning::ElearnDB::feedback')->update_or_create({
+		lectureid => $lectureid,
+		user => $c->forward('/getUserName'),
+		feedback => $feedback,
+	});
+	$c->response->redirect("/watch/$lectureid");	
+}
+
 =head1 AUTHOR
 
 Alvin,,,

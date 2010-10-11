@@ -10,9 +10,6 @@
 			<a href=[% c.uri_for('/list') %]>
 				<section>Find</section>
 			</a>
-			<a href=[% c.uri_for('/upload') %]>
-				<section>Add</section>
-			</a>
 			<a href=[% c.uri_for('/help') %]>
 				<section>Help</section>
 			</a>

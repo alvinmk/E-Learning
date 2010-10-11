@@ -1,6 +1,6 @@
 <script language="javascript" type="text/javascript" src="/src/javascript/swfobject.js"></script>
 <script language="javascript" type="text/javascript" src="/src/javascript/watch.js"></script>
-<script language="javascript" type="text/javascript" src="/src/javascript/upload.js"></script>
+<script language="javascript" type="text/javascript" src="/src/javascript/player.js"></script>
 <script language="javascript" type="text/javascript" src="/src/javascript/jQuery.js"></script>
 <script language="javascrip" type="text/javascript">
 	setVideo("[% lecturePath %]", "[% lecture %]", "[% fileExtension %]");
